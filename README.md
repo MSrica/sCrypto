@@ -1,8 +1,11 @@
-# Programsko inžinjerstvo projekt
+# Trading bot
 
 ## Tema
 
 ## Dokumentacija
+
+## Podjela posla
+https://trello.com/b/kyp88mgA/trading-bot
 
 ## Autori
 Fran Grenko</br>
