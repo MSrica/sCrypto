@@ -5,7 +5,6 @@
 ## Dokumentacija
 
 ## Poveznice
-Podjela posla - https://trello.com/b/kyp88mgA/trading-bot</br>
 Pregled UML dijagrama - https://app.diagrams.net</br>
 
 ## Autori
