@@ -20,7 +20,7 @@ Odabir kriptovalute kod jednostavnog bota ćemo riješiti ručnim odabirom kript
 
 Za predviđanje cijene, tj. trenda u kojem je cijena, postoje mnogi indikatori kojima se uspiješno, ili manje uspješno, može predvidjeti rast ili pad cijene kriptovaluta.
 
-	Neki od njih su:
+Neki od njih su:
 
 * MFI (Indeks protoka novca)
 * MA (pomični prosjek)
