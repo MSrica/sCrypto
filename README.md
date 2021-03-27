@@ -2,7 +2,7 @@
 
 ## Tema
 
-## Dokumentacija
+Izrada bota za autonomnu razmjenu kriptovaluta.
 
 ## Poveznice
 Pregled UML dijagrama - https://app.diagrams.net</br>
