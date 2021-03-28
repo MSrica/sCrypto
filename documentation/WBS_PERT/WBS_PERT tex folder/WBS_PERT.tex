@@ -6,6 +6,8 @@
 
 \usepackage{hyperref}
 \usepackage{graphicx} % Allows including images
+\usepackage[utf8]{inputenc}
+\usepackage[croatian]{babel}
 \graphicspath{ {./images/} }
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
 \usepackage{multicol}
@@ -15,7 +17,7 @@
 %----------------------------------------------------------------------------------------
 
 \title[short title]{sCrypto} 
-\subtitle{Crypto trading bot}
+\subtitle{Bot za trgovanje kriptovalutama}
 
 
 \institute[RiTeh] 
@@ -44,11 +46,13 @@ Sveučilište u Rijeci - Tehnički fakultet
 %------------------------------------------------
 
 \begin{frame}{Određivanje toka rada}
-    \item Odabir platforme
-    \item Odabir servera
-    \item Planiranje i strategija
-    \item Jednostavniji bot
-    \item Složeniji bot
+    \begin{itemize}
+        \item Odabir platforme
+        \item Odabir poslužitelja
+        \item Planiranje i strategija
+        \item Jednostavni bot
+        \item Složeni bot
+    \end{itemize}
 \end{frame}
 
 %------------------------------------------------
@@ -58,11 +62,13 @@ Sveučilište u Rijeci - Tehnički fakultet
 %------------------------------------------------
 
 \begin{frame}{WBS dijagram}
-    \item Planiranje osnovnih funkcija 
-    \item Podjela rada na manje cjeline radi bolje organizacije
+    \begin{itemize}
+        \item Planiranje osnovnih funkcija 
+        \item Podjela rada na manje cjeline radi bolje organizacije
+    \end{itemize}
     \begin{figure}
         \centering
-        \includegraphics[width=7cm]{wbs}
+        \includegraphics[width=6cm]{wbs}
         \caption{WBS dijagram}
         \label{fig:wbs}
     \end{figure}
@@ -71,9 +77,11 @@ Sveučilište u Rijeci - Tehnički fakultet
 %------------------------------------------------
 
 \begin{frame}{PERT dijagram}
-    \item Određivanje zavisnosti zadataka 
-    \item Vrijeme potrebno za izradu
-    \item Dozvoljeno kašnjenje zadataka ne kritičnog puta
+    \begin{itemize}
+        \item Određivanje zavisnosti zadataka 
+        \item Vrijeme potrebno za izradu
+        \item Dozvoljeno kašnjenje zadataka nekritičnog puta
+    \end{itemize}
     
 \end{frame}
 
@@ -87,23 +95,27 @@ Sveučilište u Rijeci - Tehnički fakultet
 \end{frame}
 
 %------------------------------------------------
-\section{Platfomra i server}
+\section{Platfomra i poslužitelj}
 %------------------------------------------------
 
 \begin{frame}{Odabir platforme}
-    \item Pronalazak platformi 
-    \item Usporedba 
-    \item Odabir
+    \begin{itemize}
+        \item Pronalazak platformi 
+        \item Usporedba 
+        \item Odabir
+    \end{itemize}
 \end{frame}
 
 %------------------------------------------------
 
-\begin{frame}{Odabir servera}
-    \item Pronalazak pogodnih solucija
-    \item Odlučivanje za cloud based server
-    \item Pronalazak servera
-    \item Usporedba
-    \item Odabir
+\begin{frame}{Odabir poslužitelja}
+    \begin{itemize}
+        \item Pronalazak pogodnih rješenja
+        \item Odlučivanje za cloud based poslužitelj
+        \item Pronalazak poslužitelja
+        \item Usporedba
+        \item Odabir
+    \end{itemize}
 \end{frame}
 
 %------------------------------------------------
@@ -111,12 +123,13 @@ Sveučilište u Rijeci - Tehnički fakultet
 %------------------------------------------------
 
 \begin{frame}{Strategija}
-    \item Odabir kriptovalute
-    \item Spot vs. leverage trgovanje
-    \item Indikatori tehničke analiza
-    \item Strategije trgovanja temeljene na indikatorima tehničke analize
-    \item Odabir
-    
+    \begin{itemize}
+        \item Odabir kriptovalute
+        \item Spot vs. leverage trgovanje
+        \item Indikatori tehničke analiza
+        \item Strategije trgovanja temeljene na indikatorima tehničke analize
+        \item Odabir
+    \end{itemize}
 \end{frame}
 
 %------------------------------------------------
@@ -124,28 +137,33 @@ Sveučilište u Rijeci - Tehnički fakultet
 %------------------------------------------------
 
 \begin{frame}{Jednostavan bot}
-    \item 2 osnovna stanja kupi i prodaj
-    \item ručno određivanje pragova
-    \item odabir valute
-    \item osnovna komunikacija s API-jem
-\end{frame}
+    \begin{itemize}
+        \item 2 osnovna stanja - kupi i prodaj
+        \item ručno određivanje pragova
+        \item odabir valute
+        \item osnovna komunikacija s API-jem
+        \end{itemize}
+    \end{frame}
 
 %------------------------------------------------
 
 \begin{frame}{Složeni bot}
-  \item AI
-  \item automatsko određivanje pragova
-  \item provjera stranica s trendovima
-  \item napredniji GUI
-  \item limitirani nalozi
+    \begin{itemize}
+        \item AI
+        \item automatsko određivanje pragova
+        \item provjera stranica s trendovima
+        \item naprednije grafičko sučelje
+        \item limitirani nalozi
+    \end{itemize}
 \end{frame}
 
 %------------------------------------------------
 
-\begin{frame}{Dokumentacija}
-    \item Tema: Bot za trgovinu kriptovalutama
-    \item GitHub https://github.com/MSrica/sCrypto
-    \item Članovi: Fran Grenko, Deni Klen, Ani Perušić, Mateo Srića, Karlo Veršić
+\begin{frame}{Poveznica na GitHub repozitorij}
+    \begin{itemize}
+        \item https://github.com/MSrica/sCrypto\newline
+    \end{itemize}
+    Članovi: Fran Grenko, Deni Klen, Ani Perušić, Mateo Srića, Karlo Veršić
 \end{frame}
 %------------------------------------------------
 
