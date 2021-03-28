@@ -28,6 +28,7 @@
 ##### Pravila
 * 2 stanja – kupi/prodaj, kada kupi, sljedece stanje je prodaj
 * Odredeni pragovi
+* Limitirani nalozi i trzisni nalozi
 
 ##### Tok rada
 
@@ -39,7 +40,6 @@
 ### Slozeniji bot
 
 * AI
-* Limitirani nalozi i trzisni nalozi
 * Identificiranje trendova sa društvenih mreža i ostalih stranica koje donose novosti o kriptovalutama
 * Baza podatka
 * Nadzorna ploca – GUI
