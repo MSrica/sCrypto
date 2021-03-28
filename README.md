@@ -4,7 +4,7 @@
 Izrada bota za autonomnu razmjenu kriptovaluta.
 
 ## Sažetak
-Plan je izraditi dva bota, jednostavniji i složeniji. Jednostavni bot samo prati kretanje cijene u određenom vremenu i na temelju toga zaključuje kada će kupiti kriptovalutu, odnosno prodati. Imat će fiksne pragove za kupnju/prodaju i trgovat će samo između jednog para valuta.
+Plan je izraditi dva bota, jednostavniji i složeniji. Jednostavni bot samo prati kretanje cijene u određenom vremenu i na temelju toga zaključuje kada će kupiti kriptovalutu, odnosno prodati.
 Nakon što se razvije jednostavni bot, razviti ćemo složeniji, koji će uz pomoć umjetne inteligencije prepoznavati trendove na raznim web stranicama i društvenim mrežama. Za njega će biti napravljena i nadzorna ploča.
 
 

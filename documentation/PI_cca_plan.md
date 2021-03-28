@@ -28,12 +28,10 @@
 ##### Pravila
 * 2 stanja – kupi/prodaj, kada kupi, sljedece stanje je prodaj
 * Odredeni pragovi
-* Jedan valutni par – BTC/USD
 
 ##### Tok rada
 
 * Izvor: https://blog.usejournal.com/a-step-by-step-guide-to-building-a-trading-bot-in-any-programming-language-d202ffe91569
-
 * Postavljanje i logika pragova
 * Funkcije koje prebacuju API u podatke
 * Logging
@@ -42,7 +40,7 @@
 
 * AI
 * Limitirani nalozi i trzisni nalozi
-* Identificiranje trendova
+* Identificiranje trendova sa društvenih mreža i ostalih stranica koje donose novosti o kriptovalutama
 * Baza podatka
 * Nadzorna ploca – GUI
   * https://startbootstrap.com/themes
