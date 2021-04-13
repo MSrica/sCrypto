@@ -1,0 +1,8 @@
+.key.txt
+.package.json
+.package-lock.json
+/node_modules
+/bin
+/.settings
+..classpath
+..project
