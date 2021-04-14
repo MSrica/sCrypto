@@ -5,7 +5,7 @@ var key =  fs.readFileSync('key.txt', 'utf8');
 
 // Without this api keys don't match on Linux
 if (process.platform == 'linux') {
-  key = key.replace('\n', '');
+    key = key.replace('\n', '');
 }
 
 var endpoint = process.argv[2];
@@ -31,8 +31,15 @@ const client = taapi.client(key);
 
 // Get technical indicator value for desired trading pair on desired time frame
 client.getIndicator(endpoint, website, currency , interval).then(function(result) {
-    console.log("Result: ", result);
 
+    // Get value only, without string
+    let value = JSON.stringify(result);
+    value = value.replace('{"value":', '');
+    value = value.replace('}', '');
+
+    console.log(process.argv[2] + " = ", value);
+
+    // Get all data and write it to results.json
     let data = {
       date: year + "/" + month + "/" + date +'/' + hours+'/'+ minutes+ '/'+seconds,
       endpoint: endpoint ,
