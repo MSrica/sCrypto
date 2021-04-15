@@ -1,27 +1,17 @@
-# Cryptocurrency Trading Bot
+# sCrypto - Cryptocurrency trading bot
 
-## Tema
-Izrada bota za autonomnu razmjenu kriptovaluta.
+## Overview
+Development of a trading bot in Java for autonomous cryptocurrency exchange. The plan is to make two bots, simpler and more complex. A simple bot monitors the movement of prices for a certain time and on that basis concludes when buying a cryptocurrency, ie selling. Once a simple bot is developed, a more complex one will be developed, which will recognize trends on various websites and social networks. A dashboard will also be made for it. 
 
-## Sažetak
-Plan je izraditi dva bota, jednostavniji i složeniji. Jednostavni bot samo prati kretanje cijene u određenom vremenu i na temelju toga zaključuje kada će kupiti kriptovalutu, odnosno prodati.
-Nakon što se razvije jednostavni bot, razviti ćemo složeniji, koji će uz pomoć umjetne inteligencije prepoznavati trendove na raznim web stranicama i društvenim mrežama. Za njega će biti napravljena i nadzorna ploča.
+## Links
+UML diagram overview  - https://app.diagrams.net</br>
+Binance cryptocurrency trading page - https://www.binance.com/en </br>
 
-
-## Dokumentacija
-Plan, razradu strategije za trgovanjem kriptovalute i detaljnije razloge zbog čega je odabrana stranica Binance, možete pogledati u folderu "documentation".
-U folderu "diagrams" se nalaze WBS i PERT dijagrami napravljeni za ovaj projekt.
-
-
-## Poveznice
-Pregled UML dijagrama - https://app.diagrams.net</br>
-Stranica za trgovanje kriptovalutama Binance - https://www.binance.com/en </br>
-
-## Autori
+## Authors
 Fran Grenko</br>
 Deni Klen</br>
 Ani Perušić</br>
 Mateo Srića</br>
 Karlo Veršić</br>
 
-Tehnički fakultet Rijeka, 2021.
+Faculty of engineering in Rijeka, 2021.
