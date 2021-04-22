@@ -1,4 +1,6 @@
-.sCrypto.iml
+.*.iml
+*.iml
 ..project
+*.idea/
 /.idea
 /.settings
