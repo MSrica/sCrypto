@@ -9,14 +9,14 @@ import java.util.Arrays;
 
 public class BinanceTaapiTest {
 
-    static String currency = "BTC/USDT";
+    static String tradingPair = "BTC/USDT";
     static CandlestickInterval intervalB = CandlestickInterval.ONE_MINUTE;
     static ArrayList<String> endpoints = new ArrayList<>(Arrays.asList("wma", "sma"));
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) {
 
         // Adjusts parameters to fit binanace-java-api
-        String currencyB = currency.replaceAll("/", "");
+        String currencyB = tradingPair.replaceAll("/", "");
 
         ArrayList<String> intervalListTaapi = new ArrayList<>(Arrays.asList("1m", "3m", "5m", "15m", "30m", "1h", "2h", "4h", "6h", "8h", "12h", "1d", "3d", "1w", "1M"));
         ArrayList<String> intervalListBinan = new ArrayList<>(Arrays.asList("ONE_MINUTE", "THREE_MINUTES", "FIVE_MINUTES", "FIFTEEN_MINUTES", "HALF_HOURLY", "HOURLY", "TWO_HOURLY", "FOUR_HOURLY", "SIX_HOURLY", "EIGHT_HOURLY", "TWELVE_HOURLY", "DAILY", "THREE_DAILY", "WEEKLY", "MONTHLY"));
@@ -40,15 +40,7 @@ public class BinanceTaapiTest {
 //        System.out.println(candlestickData);
 
         //////////////////////////////////// TA indicators value ////////////////////////////////////
-        ProcessBuilder pb = new ProcessBuilder();
-
-        for (String endpoint : endpoints) {
-            pb.command("node", "./src/test/resources/taapi_api/index.js",endpoint,currency,interval);
-            Process proces = pb.inheritIO().start();
-
-            proces.waitFor();
-//            System.out.println(proces.exitValue());
-        }
+        TAIndicatorRequest indicatorData = new TAIndicatorRequest(endpoints, tradingPair, interval);
 
     }
 

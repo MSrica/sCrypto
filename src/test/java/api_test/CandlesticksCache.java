@@ -71,6 +71,8 @@ public class CandlesticksCache {
       System.out.println(updateCandlestick);
 
     });
+
+    System.out.println("gCC: " + getCandlesticksCache());
   }
 
   /**
