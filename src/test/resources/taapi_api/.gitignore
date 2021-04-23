@@ -1,0 +1,10 @@
+.key.txt
+.*.json
+
+/node_modules
+/bin
+/.settings
+
+..classpath
+..project
+
