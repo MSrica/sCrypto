@@ -3,11 +3,6 @@ let fs = require('fs');
 // Reading api-key from key.txt
 let key =  fs.readFileSync('./src/test/resources/taapi_api/key.txt', 'utf8');
 
-// Without this api keys don't match on Linux
-if (process.platform === 'linux') {
-    key = key.replace('\n', '');
-}
-
 let endpoint = process.argv[2];
 let website = "binance";
 let currency = process.argv[3];
