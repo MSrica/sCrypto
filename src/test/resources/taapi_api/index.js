@@ -1,15 +1,10 @@
-let fs = require('fs');
+const fs = require('fs');
 
 // Reading api-key from key.txt
 let key =  fs.readFileSync('./src/test/resources/taapi_api/key.txt', 'utf8');
 
-// Without this api keys don't match on Linux
-if (process.platform === 'linux') {
-    key = key.replace('\n', '');
-}
-
 let endpoint = process.argv[2];
-let website = "binance";
+let website = 'binance';
 let currency = process.argv[3];
 let interval = process.argv[4];
 
@@ -23,8 +18,8 @@ let date = date_ob.getDate();
 let month = date_ob.getMonth() + 1;
 let year = date_ob.getFullYear();
 
-// Require taapi (using the NPM client from npm i taapi)
-const taapi = require("taapi");
+// Require taapi from node_modules
+const taapi = require('taapi');
 
 // Setup client with authentication
 const client = taapi.client(key);
@@ -32,24 +27,31 @@ const client = taapi.client(key);
 // Get technical indicator value for desired trading pair on desired time frame
 client.getIndicator(endpoint, website, currency, interval).then(function(result) {
 
-    ////////////////////////// DEBUG //////////////////////////
-    // Get value only, without string
-    // let value = JSON.stringify(result);
-    // value = value.replace('{"value":', '');
-    // value = value.replace('}', '');
-    // console.log(process.argv[2] + " = ", value);
-
-    // Get all data and write it to results.json
-    let data = {
-      date: year + "/" + month + "/" + date + '/' + hours + '/' + minutes + '/' + seconds,
-      endpoint: endpoint,
-      currency: currency,
-      interval: interval,
-      result: result
+    // Make array and append data to it (array so that ".push" function works)
+    let dataArray = [];
+    let data =  {
+        date: year + '/' + month + '/' + date + '/' + hours + '/' + minutes + '/' + seconds,
+        endpoint: endpoint,
+        currency: currency,
+        interval: interval,
+        result: result
     };
 
-    data = JSON.stringify(data);
-    fs.appendFileSync('./src/test/resources/taapi_api/results.json', data);
+    dataArray.push(data);
+    dataArray = JSON.stringify(dataArray);
+
+    let path = './src/test/resources/taapi_api/results.json';
+    if (fs.readFileSync(path).length !== 0){
+        let resultsjson = fs.readFileSync(path, 'utf-8');
+        let results = JSON.parse(resultsjson);
+
+        results.push(data);
+        resultsjson = JSON.stringify(results);
+
+        fs.writeFileSync(path, resultsjson,'utf-8');
+    } else {
+        fs.writeFileSync(path, dataArray,'utf-8');
+    }
 
     console.log('Successfully written.');
 });
