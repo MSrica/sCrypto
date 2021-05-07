@@ -1,12 +1,12 @@
 const fs = require('fs');
 
 // Reading api-key from key.txt
-let key =  fs.readFileSync('./src/test/resources/taapi_api/key.txt', 'utf8');
+const key =  fs.readFileSync('./src/test/resources/taapi_api/key.txt', 'utf8');
 
-let endpoint = process.argv[2];
-let website = 'binance';
-let currency = process.argv[3];
-let interval = process.argv[4];
+const endpoint = process.argv[2];
+const website = 'binance';
+const currency = process.argv[3];
+const interval = process.argv[4];
 
 let ts = Date.now();
 
@@ -40,18 +40,30 @@ client.getIndicator(endpoint, website, currency, interval).then(function(result)
     dataArray.push(data);
     dataArray = JSON.stringify(dataArray);
 
-    let path = './src/test/resources/taapi_api/results.json';
-    if (fs.readFileSync(path).length !== 0){
-        let resultsjson = fs.readFileSync(path, 'utf-8');
-        let results = JSON.parse(resultsjson);
+    const path = './src/test/resources/taapi_api/results.json';
 
-        results.push(data);
-        resultsjson = JSON.stringify(results);
-
-        fs.writeFileSync(path, resultsjson,'utf-8');
-    } else {
-        fs.writeFileSync(path, dataArray,'utf-8');
+    // Check if "results.json" exists, and if not, create it
+    if (!fs.existsSync(path)) {
+        fs.openSync(path, 'a+');
     }
 
-    console.log('Successfully written.');
+    // Write array data to "results.json"
+    try {
+        if (fs.readFileSync(path).length !== 0){
+            let resultsjson = fs.readFileSync(path, 'utf-8');
+            let results = JSON.parse(resultsjson);
+
+            results.push(data);
+            resultsjson = JSON.stringify(results);
+
+            fs.writeFileSync(path, resultsjson,'utf-8');
+        } else {
+            fs.writeFileSync(path, dataArray,'utf-8');
+        }
+        console.log('Successfully written.');
+
+    } catch (error) {
+        console.error(error);
+    }
+
 });
