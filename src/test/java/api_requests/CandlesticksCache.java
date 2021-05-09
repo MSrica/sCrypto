@@ -72,7 +72,7 @@ public class CandlesticksCache {
 
     });
 
-    System.out.println("gCC: " + getCandlesticksCache());
+//    System.out.println("gCC: " + getCandlesticksCache());
   }
 
   /**

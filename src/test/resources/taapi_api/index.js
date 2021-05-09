@@ -3,10 +3,10 @@ const fs = require('fs');
 // Reading api-key from key.txt
 const key =  fs.readFileSync('./src/test/resources/taapi_api/key.txt', 'utf8');
 
-const endpoint = process.argv[2];
+const indicators = ['macd', 'ma'];
 const website = 'binance';
-const currency = process.argv[3];
-const interval = process.argv[4];
+const symbol = process.argv[2];
+const interval = process.argv[3];
 
 let ts = Date.now();
 
@@ -24,15 +24,22 @@ const taapi = require('taapi');
 // Setup client with authentication
 const client = taapi.client(key);
 
-// Get technical indicator value for desired trading pair on desired time frame
-client.getIndicator(endpoint, website, currency, interval).then(function(result) {
+// Get MACD and MA200 value for desired trading pair on desired time frame
+client.getIndicator(indicators[0], website, symbol, interval).then(function(result) {
+    write(result, 0);
+}).catch(e => rejected(e, 0));
+client.getIndicator(indicators[1], website, symbol, interval, {optInTimePeriod: 200}, 0, 300).then(function(result) {
+    write(result, 1);
+}).catch(e => rejected(e, 1));
 
+// result: indicator value, indicator: macd/ma (0/1)
+function write(result, indicator) {
     // Make array and append data to it (array so that ".push" function works)
     let dataArray = [];
     let data =  {
         date: year + '/' + month + '/' + date + '/' + hours + '/' + minutes + '/' + seconds,
-        endpoint: endpoint,
-        currency: currency,
+        indicator: indicators[indicator],
+        symbol: symbol,
         interval: interval,
         result: result
     };
@@ -60,10 +67,28 @@ client.getIndicator(endpoint, website, currency, interval).then(function(result)
         } else {
             fs.writeFileSync(path, dataArray,'utf-8');
         }
-        console.log('Successfully written.');
+        if (!indicator){
+            console.log('Successfully written MACD.');
+        } else {
+            console.log('Successfully written MA');
+        }
 
     } catch (error) {
         console.error(error);
     }
+}
 
-});
+function rejected(error, indicator){
+    console.error(error);
+
+    // If indicator is MACD {} else {}
+    if (!indicator){
+        client.getIndicator(indicators[0], website, symbol, interval).then(function(result) {
+            write(result, 0);
+        }).catch(e => rejected(e, 0));
+    } else {
+        client.getIndicator(indicators[1], website, symbol, interval, {optInTimePeriod: 200}, 0, 300).then(function(result) {
+            write(result, 1);
+        }).catch(e => rejected(e, 1));
+    }
+}
