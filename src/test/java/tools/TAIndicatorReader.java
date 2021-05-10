@@ -8,10 +8,10 @@ import java.io.FileReader;
 
 public class TAIndicatorReader {
 
-    public double macdValue;
-    public double macdSignal;
-    public double macdHist;
-    public double maValue;
+    public Double macdValue;
+    public Double macdSignal;
+    public Double macdHist;
+    public Double maValue;
 
     public TAIndicatorReader() {
         JSONParser parser = new JSONParser();
@@ -32,9 +32,9 @@ public class TAIndicatorReader {
                 Object macdSignal = jsonResult.get("valueMACDSignal");
                 Object macdHist = jsonResult.get("valueMACDHist");
 
-                this.macdValue = (double) macdValue;
-                this.macdSignal = (double) macdSignal;
-                this.macdHist = (double) macdHist;
+                this.macdValue = (Double) macdValue;
+                this.macdSignal = (Double) macdSignal;
+                this.macdHist = (Double) macdHist;
 
                 // Get last object and get its MA value
                 jsonObject = (JSONObject) jsonArray.get(jsonArray.size() - 1);
@@ -42,12 +42,12 @@ public class TAIndicatorReader {
 
                 Object maValue = jsonResult.get("value");
 
-                this.maValue = (double) maValue;
+                this.maValue = (Double) maValue;
             } else {
                 // Get MA value
                 Object maValue = jsonResult.get("value");
 
-                this.maValue = (double) maValue;
+                this.maValue = (Double) maValue;
 
                 // Get last object and get its MACD values
                 jsonObject = (JSONObject) jsonArray.get(jsonArray.size() - 1);
@@ -57,9 +57,9 @@ public class TAIndicatorReader {
                 Object macdSignal = jsonResult.get("valueMACDSignal");
                 Object macdHist = jsonResult.get("valueMACDHist");
 
-                this.macdValue = (double) macdValue;
-                this.macdSignal = (double) macdSignal;
-                this.macdHist = (double) macdHist;
+                this.macdValue = (Double) macdValue;
+                this.macdSignal = (Double) macdSignal;
+                this.macdHist = (Double) macdHist;
             }
             // Getting last entry-> getting "result" object from "results.json" to get MA200 value
         } catch (Exception e) {

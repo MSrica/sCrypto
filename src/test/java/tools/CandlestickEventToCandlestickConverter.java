@@ -21,8 +21,6 @@ public class CandlestickEventToCandlestickConverter {
         this.volume = event.getVolume();
         this.closeTime = event.getCloseTime();
 
-        CandlestickEventToCandlestickConverter candlestick = this;
-
-        new MainTmp(candlestick);
+        new MainTmp(this);
     }
 }
