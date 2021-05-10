@@ -3,6 +3,7 @@ package tools;
 import com.binance.api.client.domain.market.CandlestickInterval;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 
 public class BinanceTaapiDataConverter {
 
@@ -11,7 +12,7 @@ public class BinanceTaapiDataConverter {
     public BinanceTaapiDataConverter(String tradingPair){
 
         // Adjusts trading pair to fit binanace-java-api
-        this.tradingPairB = tradingPair.replaceAll("/", "");
+        this.tradingPairB = tradingPair.replaceAll("/", "").toLowerCase();
     }
 
 
