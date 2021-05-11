@@ -28,9 +28,9 @@ public class MainTmp {
         System.out.println("MACD:\n- value: " + indicators.macdValue + "\n- signal: " + indicators.macdSignal + "\n- hist: " + indicators.macdHist + "\nMA200:\n- value: " + indicators.maValue);
         System.out.println(tradingPair + "\n- high: " + candlestick.high + "\n- open: " + candlestick.open + "\n- close: " + candlestick.close + "\n- open: " + candlestick.low);
 
+        CheckTrendAndMACD asset = new CheckTrendAndMACD(candlestick.close, indicators);
 
-        CheckTrend price = new CheckTrend(candlestick.close, indicators.maValue);
-        System.out.println("Trend: " + (price.trend ? "up":"down"));
-
+        System.out.println("Trend: " + (asset.trend ? "up":"down"));
+        System.out.println("macdBelowZero: " + (asset.macdBelowZero ? "yes":"no"));
     }
 }
