@@ -3,6 +3,7 @@ package tools;
 public class CheckTrendAndMACD {
     public boolean trend;
     public boolean macdBelowZero;
+    public boolean orderPlaced;
 
     // Sets .trend to "true" if price is in up-trend (above 200MA), and to "false" if price is in down-trend (below 200MA)
     // Sets .macdBelowZero to "true" if MACD is below zero line, and to "false" if MACD is above zero line
