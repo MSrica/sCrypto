@@ -5,22 +5,31 @@ import strategy.MainTmp;
 
 public class CandlestickEventToCandlestickConverter {
     public Long openTime;
-    public String open;
-    public String high;
-    public String low;
-    public String close;
-    public String volume;
+    public Float open;
+    public Float high;
+    public Float low;
+    public Float close;
+    public Float volume;
     public Long closeTime;
+    public Double macdValue;
+    public Double macdSignal;
+    public Double macdHist;
+    public Double maValue;
 
     public CandlestickEventToCandlestickConverter(CandlestickEvent event) {
         this.openTime = event.getOpenTime();
-        this.open = event.getOpen();
-        this.high = event.getHigh();
-        this.low = event.getLow();
-        this.close = event.getClose();
-        this.volume = event.getVolume();
+        this.open = Float.parseFloat(event.getOpen());
+        this.high = Float.parseFloat(event.getHigh());
+        this.low = Float.parseFloat(event.getLow());
+        this.close = Float.parseFloat(event.getClose());
+        this.volume = Float.parseFloat(event.getVolume());
         this.closeTime = event.getCloseTime();
+        this.macdValue = MainTmp.getIndicators().macdValue;
+        this.macdSignal = MainTmp.getIndicators().macdSignal;
+        this.macdHist = MainTmp.getIndicators().macdHist;
+        this.maValue = MainTmp.getIndicators().maValue;
 
-        new MainTmp(this);
+        // Check if given parameters meets required conditions
+        new CheckConditions(this);
     }
 }

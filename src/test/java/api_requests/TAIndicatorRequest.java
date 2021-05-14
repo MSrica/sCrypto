@@ -4,11 +4,11 @@ import java.io.IOException;
 
 public class TAIndicatorRequest {
 
-    public TAIndicatorRequest(String currency, String interval) {
+    public TAIndicatorRequest(String tradingPair, String interval) {
 
         ProcessBuilder pb = new ProcessBuilder();
 
-        pb.command("node", "./src/test/resources/taapi_api/index.js",currency,interval);
+        pb.command("node", "./src/test/resources/taapi_api/index.js",tradingPair, interval);
         Process proces;
         try {
             proces = pb.inheritIO().start();
@@ -23,6 +23,5 @@ public class TAIndicatorRequest {
             e.printStackTrace();
         }
 //        System.out.println(proces.exitValue());
-
     }
 }
