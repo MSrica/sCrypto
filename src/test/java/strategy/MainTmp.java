@@ -8,7 +8,7 @@ import tools.*;
 
 public class MainTmp {
 
-    static String tradingPair = "BTC/USDT";
+    public static String tradingPair = "BTC/USDT";
     static CandlestickInterval intervalB = CandlestickInterval.FIVE_MINUTES;
     private static TAIndicatorReader indicators;
 
