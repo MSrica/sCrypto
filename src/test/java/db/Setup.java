@@ -1,3 +1,5 @@
+package db;
+
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 

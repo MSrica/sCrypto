@@ -1,3 +1,5 @@
+package db;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -29,30 +31,30 @@ public class AlterUser {
         if(commandSetup.get() == 0) return !found.get();
 
         switch (commandSetup.get()) {
-            case 1 -> {
+            case 1:
                 alteredString.set(Setup.username());
                 alterUserSet.set(" SET USERNAME='" + alteredString + "'");
                 alterUserCheck.set("SELECT * FROM " + Constants.tableName + " WHERE USERNAME='" + alteredString + "'");
-            }
-            case 2 -> {
+                break;
+            case 2:
                 alteredString.set(Setup.password());
                 alterUserSet.set(" SET PASS='" + alteredString + "'");
-            }
-            case 3 -> {
+                break;
+            case 3:
                 alteredString.set(Setup.email());
                 alterUserSet.set(" SET EMAIL='" + alteredString + "'");
                 alterUserCheck.set("SELECT * FROM " + Constants.tableName + " WHERE EMAIL='" + alteredString + "'");
-            }
-            case 4 -> {
+                break;
+            case 4:
                 alteredString.set(Setup.apiKey());
                 alterUserSet.set(" SET API_KEY='" + alteredString + "'");
                 alterUserCheck.set("SELECT * FROM " + Constants.tableName + " WHERE API_KEY='" + alteredString + "'");
-            }
-            case 5 -> {
+                break;
+            case 5:
                 alteredString.set(Setup.apiSecret());
                 alterUserSet.set(" SET API_SECRET='" + alteredString + "'");
                 alterUserCheck.set("SELECT * FROM " + Constants.tableName + " WHERE API_SECRET='" + alteredString + "'");
-            }
+                break;
         }
 
         // checking for existing data
@@ -88,21 +90,21 @@ public class AlterUser {
     }
     protected static void updateCurrentUser(User user, AtomicReference<String> alterString, AtomicInteger commandSetup){
         switch (commandSetup.get()) {
-            case 1 -> {
+            case 1:
                 user.username = alterString.get();
-            }
-            case 2 -> {
+                break;
+            case 2:
                 user.password = alterString.get();
-            }
-            case 3 -> {
+                break;
+            case 3:
                 user.email = alterString.get();
-            }
-            case 4 -> {
+                break;
+            case 4:
                 user.apiKey = alterString.get();
-            }
-            case 5 -> {
+                break;
+            case 5:
                 user.apiSecret = alterString.get();
-            }
+                break;
         }
     }
 }

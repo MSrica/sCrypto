@@ -1,3 +1,5 @@
+package db;
+
 public class Constants {
 
     protected static final String databaseName = "people";

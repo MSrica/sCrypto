@@ -1,3 +1,5 @@
+package db;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Test {
@@ -11,15 +13,15 @@ public class Test {
 
     public static void main(String[] args){
         // variables
-        protected User user = new User();
+        User user = new User();
 
         // choosing login or registration
         actions(user);
     }
     protected static void actions(User user){
-        protected boolean ret = false;
+        boolean ret = false;
         do{
-            protected AtomicInteger loginSetup = new AtomicInteger(Setup.login());
+            AtomicInteger loginSetup = new AtomicInteger(Setup.login());
             if (loginSetup.get() == 0) {
                 // login
                 ret = Login.getData(user);
@@ -35,18 +37,18 @@ public class Test {
         userActions(user);
     }
     protected static void userActions(User user){
-        protected AtomicInteger commandSetup = new AtomicInteger(Setup.nextCommand());
+        AtomicInteger commandSetup = new AtomicInteger(Setup.nextCommand());
         while(commandSetup.get() != 0){
             switch(commandSetup.get()){
-                case 1 -> {
+                case 1:
                     new DisplayData();
-                }
-                case 2 -> {
+                    break;
+                case 2:
                     AlterUser.alterUser(user);
-                }
-                case 3 -> {
+                    break;
+                case 3:
                     if(RemoveUser.removeUser(user)) actions(user);
-                }
+                    break;
             }
             commandSetup.set(Setup.nextCommand());
         }
