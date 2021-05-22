@@ -2,25 +2,25 @@ import java.sql.*;
 
 public class DisplayData {
 
-    public DisplayData(String username, String password, String databaseName, String tableName){
+    public DisplayData(){
+        // constants
+        final String sqlSelectAllData = "SELECT * FROM " + Constants.tableName;
 
-        final String sqlSelectAllData = "SELECT * FROM " + tableName;
-
-        try (Connection conn = DriverManager.getConnection(Setup.connectionUrl(databaseName), username, password);
+        // displaying all data
+        try (Connection conn = DriverManager.getConnection(Setup.connectionUrl(), Constants.adminUsername, Constants.adminPassword);
              PreparedStatement ps = conn.prepareStatement(sqlSelectAllData);
              ResultSet rs = ps.executeQuery()) {
-            System.out.println("Successfully connected!");
-
+            // scrolling trough results
             while (rs.next()) {
-                int id = rs.getInt("ID");
                 String name = rs.getString("USERNAME");
-                String lastName = rs.getString("PASS");
+                String pass = rs.getString("PASS");
+                String email = rs.getString("EMAIL");
                 String apiKey = rs.getString("API_KEY");
                 String apiSecret = rs.getString("API_SECRET");
-                System.out.println(id + " " + name + " " + lastName + " " + apiKey + " " + apiSecret);
+                System.out.println(name + " " + pass + " " + email + " " + apiKey + " " + apiSecret);
             }
         } catch (SQLException e){
-            System.out.println("Error");
+            e.printStackTrace();
         }
     }
 
