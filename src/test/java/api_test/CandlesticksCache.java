@@ -18,7 +18,7 @@ public class CandlesticksCache {
   /**
    * Key is the start/open time of the candle, and the value contains candlestick date.
    */
-  private Map<Long, Candlestick> candlesticksCache;
+  public Map<Long, Candlestick> candlesticksCache;
 
   public CandlesticksCache(String symbol, CandlestickInterval interval) {
     initializeCandlestickCache(symbol, interval);
@@ -39,16 +39,22 @@ public class CandlesticksCache {
     }
   }
 
+  public static Candlestick updateCandlestick;
+
+  public static Candlestick getUpdateCandlestick() {
+    return updateCandlestick;
+  }
+
   /**
    * Begins streaming of depth events.
    */
   private void startCandlestickEventStreaming(String symbol, CandlestickInterval interval) {
     BinanceApiClientFactory factory = BinanceApiClientFactory.newInstance();
-    BinanceApiWebSocketClient client = factory.newWebSocketClient();
+    BinanceApiWebSocketClient client = factory.newWebSocketClient();  //TODO: close client
 
     client.onCandlestickEvent(symbol.toLowerCase(), interval, response -> {
       Long openTime = response.getOpenTime();
-      Candlestick updateCandlestick = candlesticksCache.get(openTime);
+      updateCandlestick = candlesticksCache.get(openTime);
       if (updateCandlestick == null) {
         // new candlestick
         updateCandlestick = new Candlestick();
