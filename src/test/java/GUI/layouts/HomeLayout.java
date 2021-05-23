@@ -9,15 +9,15 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadLocalRandom;
@@ -28,15 +28,19 @@ public class HomeLayout {
     final int WINDOW_SIZE = 10;
     public static ScheduledExecutorService scheduledExecutorService;
 
-    //components
-    Button logoutButton = new Button("Logout");
     //title pane
     Label logo = new Label("sCrypto");
     //sidebar menu
     Label sidebar = new Label("SideBar");
+    Label tiLabel = new Label("TI selection:");
+    ComboBox<String> tiSelectionBox = new ComboBox<String>();
+    Label intervalLabel = new Label("interval selection:");
+    ComboBox<String> intervalSelectionBox = new ComboBox<String>();
+    Button sendRequestButton = new Button("Commit changes/Send request");   //TODO: needs implementation --> on press take interval and TI and give to strategy
+    Button logoutButton = new Button("Logout");
 
     public VBox homeScreenLayout() {
-        VBox layout = new VBox();
+        VBox layout = new VBox(50);
         BorderPane pane = new BorderPane();
 
         //title pane
@@ -47,11 +51,43 @@ public class HomeLayout {
         //sidebar menu
         VBox sideBarVBox = new VBox(20);
         sideBarVBox.setAlignment(Pos.TOP_CENTER);
-        sideBarVBox.getChildren().addAll(sidebar, logoutButton);
+
+        tiSelectionBox.getItems().add("first currency");
+        tiSelectionBox.getItems().add("second currency");
+        tiSelectionBox.getItems().add("third currency");
+
+        tiSelectionBox.setOnAction((event) -> {
+            int selectedIndex = tiSelectionBox.getSelectionModel().getSelectedIndex();
+            Object selectedItem = tiSelectionBox.getSelectionModel().getSelectedItem();   //send to strategy //TODO: first get the bitch out the fuck ove lambde jebu
+            System.out.println("TI: " + selectedIndex + " : " + selectedItem);
+        });
+
+        intervalSelectionBox.getItems().add("1min");
+        intervalSelectionBox.getItems().add("5min");
+        intervalSelectionBox.getItems().add("15min");
+        intervalSelectionBox.getItems().add("1h");
+
+        intervalSelectionBox.setOnAction((event) -> {
+            int selectedIndex = intervalSelectionBox.getSelectionModel().getSelectedIndex();
+            Object selectedItem = intervalSelectionBox.getSelectionModel().getSelectedItem();   //send to strategy
+            System.out.println("Interval: " + selectedIndex + " : " + selectedItem);
+        });
+
+        sendRequestButton.setOnAction(e -> {
+            //TODO: send request with interval and TI
+            System.out.println(intervalSelectionBox.getSelectionModel().getSelectedItem());
+            System.out.println(tiSelectionBox.getSelectionModel().getSelectedItem());
+        });
+
+        logoutButton.setOnAction(e -> {
+            MainGUI.getWindow().setScene(MainGUI.LoginScreen);
+        });
+
+        sideBarVBox.getChildren().addAll(sidebar, tiLabel, tiSelectionBox, intervalLabel, intervalSelectionBox, sendRequestButton, logoutButton);
 
         //mock graph
         CategoryAxis xAxis = new CategoryAxis();    //od kud, do kud, increment
-        NumberAxis yAxis = new NumberAxis(38000, 40000, 10);
+        NumberAxis yAxis = new NumberAxis(20000, 40000, 100);    //TODO: dynamically set od kud do kud because kinda shitty
         xAxis.setLabel("Time/m");
         xAxis.setAnimated(false); // axis animations are removed
         yAxis.setLabel("Value");
@@ -62,11 +98,15 @@ public class HomeLayout {
         lineChart.setTitle("Graph");
         lineChart.setAnimated(false); // disable animations
 
+        //hartB.prefHeightProperty().bind(chartA.heightProperty())
+        lineChart.prefHeightProperty().bind(MainGUI.getWindow().heightProperty());
+        lineChart.prefWidthProperty().bind(MainGUI.getWindow().widthProperty());
+
         //defining a series to display data
         XYChart.Series<String, Number> highSeries = new XYChart.Series<>();
-        highSeries.setName("highSeries");
+        highSeries.setName("candlestick high val");
         XYChart.Series<String, Number> lowSeries = new XYChart.Series<>();
-        highSeries.setName("lowSeries");
+        highSeries.setName("candlestick low val");
 
         // add series to chart
         lineChart.getData().addAll(highSeries, lowSeries);
@@ -108,11 +148,6 @@ public class HomeLayout {
                     lowSeries.getData().remove(0);
             });
         }, 0, 5, TimeUnit.SECONDS);
-
-        //actions
-        logoutButton.setOnAction(e -> {
-            MainGUI.getWindow().setScene(MainGUI.LoginScreen);
-        });
 
         pane.setTop(titleHBox);
         pane.setLeft(sideBarVBox);

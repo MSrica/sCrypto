@@ -27,7 +27,7 @@ public class MainGUI extends Application {
     HomeLayout homeLayout = new HomeLayout();
 
     public static void main(String[] args) {
-        BinanceTaapiTest test = new BinanceTaapiTest(); //launches binance stupp --> api_test
+        BinanceTaapiTest test = new BinanceTaapiTest(); //launches binance stuff --> api_test
         launch(args); // launches gui application
     }
 
@@ -37,8 +37,14 @@ public class MainGUI extends Application {
         window = primaryStage;
         window.setTitle("sCrypto_Home");
 
-        LoginScreen = new Scene(loginLayout.loginSceneLayout(), 700, 500);
-        HomeScreen = new Scene(homeLayout.homeScreenLayout(), 700, 500);
+        LoginScreen = new Scene(loginLayout.loginSceneLayout(), 1000, 700);
+        HomeScreen = new Scene(homeLayout.homeScreenLayout(), 1000, 700);
+
+        //scene.getStylesheets().add(getClass().getResource("demo.css").toExternalForm());
+        //getClass().getResource("style.css").toString()
+        //define css for each or same for both idgaf
+
+        //LoginScreen.getStylesheets().add(getClass().getResource("/stylesheets/login_reg.css").toExternalForm());
 
         //za početak login screen directly, kašnje provjera ako je već ulogiran korisnik
         window.setScene(LoginScreen);
