@@ -3,7 +3,7 @@ const fs = require('fs');
 // Reading api-key from key.txt
 const key =  fs.readFileSync('./src/test/resources/taapi_api/key.txt', 'utf8');
 
-const indicators = ['macd', 'ma'];
+const indicatorList = ['macd', 'ma'];
 const website = 'binance';
 const symbol = process.argv[2];
 const interval = process.argv[3];
@@ -25,12 +25,7 @@ const taapi = require('taapi');
 const client = taapi.client(key);
 
 // Get MACD and MA200 value for desired trading pair on desired time frame
-client.getIndicator(indicators[0], website, symbol, interval).then(function(result) {
-    write(result, 0);
-}).catch(e => rejected(e, 0));
-client.getIndicator(indicators[1], website, symbol, interval, {optInTimePeriod: 200}, 0, 300).then(function(result) {
-    write(result, 1);
-}).catch(e => rejected(e, 1));
+requestIndicator(indicatorList);
 
 // result: indicator value, indicator: macd/ma (0/1)
 function write(result, indicator) {
@@ -38,7 +33,7 @@ function write(result, indicator) {
     let dataArray = [];
     let data =  {
         date: year + '/' + month + '/' + date + '/' + hours + '/' + minutes + '/' + seconds,
-        indicator: indicators[indicator],
+        indicator: indicatorList[indicator],
         symbol: symbol,
         interval: interval,
         result: result
@@ -81,14 +76,30 @@ function write(result, indicator) {
 function rejected(error, indicator){
     console.error(error);
 
-    // If indicator is MACD {} else {}
-    if (!indicator){
-        client.getIndicator(indicators[0], website, symbol, interval).then(function(result) {
-            write(result, 0);
-        }).catch(e => rejected(e, 0));
-    } else {
-        client.getIndicator(indicators[1], website, symbol, interval, {optInTimePeriod: 200}, 0, 300).then(function(result) {
-            write(result, 1);
-        }).catch(e => rejected(e, 1));
+    let counterMacd = 1;
+    let counterMa = 1;
+    // If indicator is MACD {request macd} else {request ma200}
+    if (!indicator) {
+        console.log('\tmacd try' + counterMacd++);
+        requestIndicator('macd');
     }
+    else {
+        console.log('\tma try' + counterMa++);
+        requestIndicator('ma200');
+    }
+}
+
+function requestIndicator(indicatorList) {
+    indicatorList.forEach(indicator =>  {
+        if (indicator === 'macd')
+            // Request MACD
+            client.getIndicator(indicatorList[0], website, symbol, interval).then(function(result) {
+                write(result, 0);
+            }).catch(e => rejected(e, 0));
+        else if (indicator === 'ma')
+            // Request MA200
+            client.getIndicator(indicatorList[1], website, symbol, interval, {optInTimePeriod: 200}, 0, 300).then(function(result) {
+                write(result, 1);
+            }).catch(e => rejected(e, 1));
+    });
 }
