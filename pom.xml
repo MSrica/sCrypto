@@ -27,4 +27,16 @@
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
+    <build>
+        <resources>
+            <resource>
+                <directory>src/test/resources</directory>
+                <includes>
+                    <include>login_reg.css</include>
+                    <include>home.css</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
 </project>
