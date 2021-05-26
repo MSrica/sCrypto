@@ -1,25 +1,26 @@
 package db;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.*;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Login {
-    protected static boolean getData(User user){
+    protected static boolean getData(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
         user.username = Setup.username();
-        user.password = Setup.password();
+        String tmpPassword = Setup.password();
+        user.password = PasswordEncryptionService.getEncryptedPassword(tmpPassword, Constants.salt);
 
         return usernameAndPasswordCheck(user);
     }
     protected static boolean usernameAndPasswordCheck(User user){
-        // variables
         AtomicBoolean found = new AtomicBoolean(false);
 
-        // finding user
-        final String sqlSelectAllData = "SELECT * FROM " + Constants.tableName + " WHERE (USERNAME='" + user.username + "' AND PASS='" + user.password + "')";
-        try (Connection conn = DriverManager.getConnection(Setup.connectionUrl(), Constants.adminUsername, Constants.adminPassword);
+        final String sqlSelectAllData = "SELECT * FROM " + Constants.tableName + " WHERE (USERNAME='" + user.username + "' AND PASS='" + Arrays.toString(user.password) + "')";
+        try (Connection conn = DriverManager.getConnection(Constants.databaseUrl, Constants.adminUsername, Constants.adminPassword);
              PreparedStatement ps = conn.prepareStatement(sqlSelectAllData);
              ResultSet rs = ps.executeQuery()) {
-            // if a user is found setting the variable to true
             while (rs.next()){
                 user.email = rs.getString("EMAIL");
                 user.apiKey = rs.getString("API_KEY");

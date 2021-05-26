@@ -1,33 +1,33 @@
 package db;
 
+import org.apache.commons.lang3.StringUtils;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.*;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Registration {
-    protected static boolean addData(User user){
-        // entering data
+    protected static boolean addData(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
         enterUserData(user);
-
-        // if existing data is found
         if(chekExisting(user)) return false;
-
-        if(!addUserData(user)) return false;
-
-        // TODO email confirmation
-
-        return true;
+        return addUserData(user);
     }
-    protected static void enterUserData(User user){
+    protected static void enterUserData(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
         user.username = Setup.username();
-        user.password = Setup.password();
+        System.out.println("Password needs to have more than 8 characters, at least one uppercase letter and only alphanumeric characters");
+        String tmpPassword = Setup.password();
+        user.password = PasswordEncryptionService.getEncryptedPassword(tmpPassword, Constants.salt);
         user.email = Setup.email();
         user.apiKey = Setup.apiKey();
         user.apiSecret = Setup.apiSecret();
+        if (!(tmpPassword.length() >= 8 && !StringUtils.isAllLowerCase(tmpPassword) && tmpPassword.matches(".*\\d.*")))
+              enterUserData(user);
     }
     protected static boolean chekExisting(User user){
         AtomicBoolean doubleUser = new AtomicBoolean(false);
         final String sqlSelectExistingData = "SELECT * FROM " + Constants.tableName + " WHERE USERNAME='" + user.username + "' OR EMAIL='" + user.email + "' OR API_KEY='" + user.apiKey + "' OR API_SECRET='" + user.apiSecret + "'";
-        try (Connection conn = DriverManager.getConnection(Setup.connectionUrl(), Constants.adminUsername, Constants.adminPassword);
+        try (Connection conn = DriverManager.getConnection(Constants.databaseUrl, Constants.adminUsername, Constants.adminPassword);
              PreparedStatement ps = conn.prepareStatement(sqlSelectExistingData);
              ResultSet rs = ps.executeQuery()){
             while(rs.next()){
@@ -51,13 +51,12 @@ public class Registration {
     }
     protected static boolean addUserData(User user){
         // adding user query
-        final String addUser = "INSERT INTO " + Constants.databaseName + "." + Constants.tableName + "(USERNAME, PASS, EMAIL, API_KEY, API_SECRET)\n" +
-                "VALUES ('" + user.username + "', '" + user.password + "', '" +  user.email + "', '" + user.apiKey + "', '" + user.apiSecret  + "')";
-
+        final String addUser = "INSERT INTO " + Constants.tableName + "(USERNAME, PASS, EMAIL, API_KEY, API_SECRET)\n" +
+                "VALUES ('" + user.username + "', '" + Arrays.toString(user.password) + "', '" +  user.email + "', '" + user.apiKey + "', '" + user.apiSecret  + "')";
         // adding user
-        try (Connection conn = DriverManager.getConnection(Setup.connectionUrl(), Constants.adminUsername, Constants.adminPassword);
+        try (Connection conn = DriverManager.getConnection(Constants.databaseUrl, Constants.adminUsername, Constants.adminPassword);
              PreparedStatement ps = conn.prepareStatement(addUser)){
-            int rs = ps.executeUpdate();
+            ps.executeUpdate();
             return true;
         } catch (Exception e){
             e.printStackTrace();
