@@ -2,6 +2,7 @@ package GUI;
 
 import GUI.layouts.HomeLayout;
 import GUI.layouts.LoginLayout;
+import GUI.preferences.LocalProperties;
 import api_test.BinanceTaapiTest;
 import api_test.CandlesticksCache;
 import javafx.application.Application;
@@ -9,11 +10,13 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.net.MalformedURLException;
+
 public class MainGUI extends Application {
 
     //stage
     private static Stage window;
-
     public static Stage getWindow() {
         return window;
     }
@@ -26,8 +29,13 @@ public class MainGUI extends Application {
     LoginLayout loginLayout = new LoginLayout();
     HomeLayout homeLayout = new HomeLayout();
 
+    //stuff
+    static BinanceTaapiTest test;
+    public static LocalProperties prop;
+
     public static void main(String[] args) {
-        BinanceTaapiTest test = new BinanceTaapiTest(); //launches binance stuff --> api_test
+        prop  = new LocalProperties();
+        test = new BinanceTaapiTest(); //launches binance stuff --> api_test
         launch(args); // launches gui application
     }
 
@@ -44,7 +52,8 @@ public class MainGUI extends Application {
         //getClass().getResource("style.css").toString()
         //define css for each or same for both idgaf
 
-        //LoginScreen.getStylesheets().add(getClass().getResource("/stylesheets/login_reg.css").toExternalForm());
+        LoginScreen.getStylesheets().add(getClass().getResource("/stylesheets/login_reg.css").toExternalForm());
+        HomeScreen.getStylesheets().add(getClass().getResource("/stylesheets/home.css").toExternalForm());
 
         //za početak login screen directly, kašnje provjera ako je već ulogiran korisnik
         window.setScene(LoginScreen);
@@ -54,6 +63,7 @@ public class MainGUI extends Application {
     @Override
     public void stop() throws Exception {
         super.stop();
-        homeLayout.scheduledExecutorService.shutdownNow();  //use this later    //stops the graph updater
+        homeLayout.scheduledExecutorService.shutdownNow();  //use this later    //stops the graph update
+        //test.getCandlestickRaw().getFucker().close();   //TODO: find not deprecated close func
     }
 }

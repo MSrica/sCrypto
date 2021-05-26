@@ -6,6 +6,7 @@ import com.binance.api.client.BinanceApiWebSocketClient;
 import com.binance.api.client.domain.market.Candlestick;
 import com.binance.api.client.domain.market.CandlestickInterval;
 
+import java.io.Closeable;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -48,9 +49,47 @@ public class CandlesticksCache {
   /**
    * Begins streaming of depth events.
    */
+  private BinanceApiClientFactory factory;
+  private BinanceApiWebSocketClient client;
+  private Closeable fucker;    //Closeable var for client --> close deprecated in main class  //TODO: REFACTOR THE FUCKER, ANI
+
+  public Closeable getFucker() {
+    return fucker;
+  }
+
+  public BinanceApiWebSocketClient getClient() {
+    return client;
+  }
+
   private void startCandlestickEventStreaming(String symbol, CandlestickInterval interval) {
-    BinanceApiClientFactory factory = BinanceApiClientFactory.newInstance();
-    BinanceApiWebSocketClient client = factory.newWebSocketClient();  //TODO: close client
+    factory = BinanceApiClientFactory.newInstance();
+    client = factory.newWebSocketClient();  //TODO: close client
+
+    fucker = client.onCandlestickEvent(symbol.toLowerCase(), interval, response -> {
+      Long openTime = response.getOpenTime();
+      updateCandlestick = candlesticksCache.get(openTime);
+      if (updateCandlestick == null) {
+        // new candlestick
+        updateCandlestick = new Candlestick();
+      }
+      // update candlestick with the stream data
+      updateCandlestick.setOpenTime(response.getOpenTime());
+      updateCandlestick.setOpen(response.getOpen());
+      updateCandlestick.setLow(response.getLow());
+      updateCandlestick.setHigh(response.getHigh());
+      updateCandlestick.setClose(response.getClose());
+      updateCandlestick.setCloseTime(response.getCloseTime());
+      updateCandlestick.setVolume(response.getVolume());
+      updateCandlestick.setNumberOfTrades(response.getNumberOfTrades());
+      updateCandlestick.setQuoteAssetVolume(response.getQuoteAssetVolume());
+      updateCandlestick.setTakerBuyQuoteAssetVolume(response.getTakerBuyQuoteAssetVolume());
+      updateCandlestick.setTakerBuyBaseAssetVolume(response.getTakerBuyQuoteAssetVolume());
+
+      // Store the updated candlestick in the cache
+      candlesticksCache.put(openTime, updateCandlestick);
+      System.out.println(updateCandlestick);
+
+    });
 
     client.onCandlestickEvent(symbol.toLowerCase(), interval, response -> {
       Long openTime = response.getOpenTime();
@@ -89,7 +128,7 @@ public class CandlesticksCache {
     return candlesticksCache;
   }
 
-  public static void main(String[] args) {
-    new CandlesticksCache("ETHBTC", CandlestickInterval.ONE_MINUTE);
-  }
+  //public static void main(String[] args) {
+  //  new CandlesticksCache("ETHBTC", CandlestickInterval.ONE_MINUTE);
+  //}
 }

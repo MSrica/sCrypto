@@ -1,6 +1,7 @@
 package GUI.layouts;
 
 import GUI.MainGUI;
+
 import api_test.CandlesticksCache;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -17,10 +18,8 @@ import javafx.scene.layout.VBox;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 public class HomeLayout {
@@ -32,8 +31,8 @@ public class HomeLayout {
     Label logo = new Label("sCrypto");
     //sidebar menu
     Label sidebar = new Label("SideBar");
-    Label tiLabel = new Label("TI selection:");
-    ComboBox<String> tiSelectionBox = new ComboBox<String>();
+    Label tradingPairLabel = new Label("TI selection:");
+    ComboBox<String> tradingPairSelectionBox = new ComboBox<String>();
     Label intervalLabel = new Label("interval selection:");
     ComboBox<String> intervalSelectionBox = new ComboBox<String>();
     Button sendRequestButton = new Button("Commit changes/Send request");   //TODO: needs implementation --> on press take interval and TI and give to strategy
@@ -52,13 +51,13 @@ public class HomeLayout {
         VBox sideBarVBox = new VBox(20);
         sideBarVBox.setAlignment(Pos.TOP_CENTER);
 
-        tiSelectionBox.getItems().add("first currency");
-        tiSelectionBox.getItems().add("second currency");
-        tiSelectionBox.getItems().add("third currency");
+        tradingPairSelectionBox.getItems().add("BTC/USDT");
+        tradingPairSelectionBox.getItems().add("second currency");
+        tradingPairSelectionBox.getItems().add("third currency");
 
-        tiSelectionBox.setOnAction((event) -> {
-            int selectedIndex = tiSelectionBox.getSelectionModel().getSelectedIndex();
-            Object selectedItem = tiSelectionBox.getSelectionModel().getSelectedItem();   //send to strategy //TODO: first get the bitch out the fuck ove lambde jebu
+        tradingPairSelectionBox.setOnAction((event) -> {
+            int selectedIndex = tradingPairSelectionBox.getSelectionModel().getSelectedIndex();
+            Object selectedItem = tradingPairSelectionBox.getSelectionModel().getSelectedItem();   //send to strategy //TODO: first get the bitch out the fuck ove lambde jebu
             System.out.println("TI: " + selectedIndex + " : " + selectedItem);
         });
 
@@ -76,29 +75,31 @@ public class HomeLayout {
         sendRequestButton.setOnAction(e -> {
             //TODO: send request with interval and TI
             System.out.println(intervalSelectionBox.getSelectionModel().getSelectedItem());
-            System.out.println(tiSelectionBox.getSelectionModel().getSelectedItem());
+            System.out.println(tradingPairSelectionBox.getSelectionModel().getSelectedItem());
         });
 
         logoutButton.setOnAction(e -> {
+            System.out.println("On logout output: " + MainGUI.prop.getPropertyString("username"));
             MainGUI.getWindow().setScene(MainGUI.LoginScreen);
         });
 
-        sideBarVBox.getChildren().addAll(sidebar, tiLabel, tiSelectionBox, intervalLabel, intervalSelectionBox, sendRequestButton, logoutButton);
+        sideBarVBox.getChildren().addAll(sidebar, tradingPairLabel, tradingPairSelectionBox, intervalLabel, intervalSelectionBox, sendRequestButton, logoutButton);
+
 
         //mock graph
-        CategoryAxis xAxis = new CategoryAxis();    //od kud, do kud, increment
-        NumberAxis yAxis = new NumberAxis(20000, 40000, 100);    //TODO: dynamically set od kud do kud because kinda shitty
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis(20000, 40000, 100);    //TODO: dynamically set range because kinda shitty
         xAxis.setLabel("Time/m");
-        xAxis.setAnimated(false); // axis animations are removed
+        //xAxis.setAnimated(false); // axis animations are removed
         yAxis.setLabel("Value");
-        yAxis.setAnimated(false); // axis animations are removed
+        //yAxis.setAnimated(false); // axis animations are removed
 
         //creating the line chart with two axis created above
         final LineChart<String, Number> lineChart = new LineChart<>(xAxis, yAxis);
         lineChart.setTitle("Graph");
-        lineChart.setAnimated(false); // disable animations
+        //lineChart.setAnimated(false); // disable animations
 
-        //hartB.prefHeightProperty().bind(chartA.heightProperty())
+        //chartB.prefHeightProperty().bind(chartA.heightProperty())
         lineChart.prefHeightProperty().bind(MainGUI.getWindow().heightProperty());
         lineChart.prefWidthProperty().bind(MainGUI.getWindow().widthProperty());
 
@@ -120,7 +121,7 @@ public class HomeLayout {
         // put dummy data onto graph per second
         scheduledExecutorService.scheduleAtFixedRate(() -> {
 
-            Integer random = ThreadLocalRandom.current().nextInt(100);   //tu gre value od binancea ili čega god
+            //Integer random = ThreadLocalRandom.current().nextInt(100);   //tu gre value od binancea ili čega god
             // Update the chart
             Platform.runLater(() -> {
                 String highVal;

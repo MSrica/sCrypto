@@ -1,6 +1,7 @@
 package GUI.layouts;
 
 import GUI.MainGUI;
+import GUI.preferences.LocalProperties;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
@@ -59,6 +60,8 @@ public class LoginLayout {
                 MainGUI.getWindow().setScene(MainGUI.HomeScreen);
             }
 
+            //test for prefs
+            MainGUI.prop.setPropertyString("username", "myNewUsername");
         });
 
         loginLayout.getChildren().addAll(loginUsername, loginPassword, loginResponse, loginButton);

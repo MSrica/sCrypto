@@ -13,6 +13,12 @@ public class BinanceTaapiTest {
     static CandlestickInterval intervalB = CandlestickInterval.ONE_MINUTE;
     static ArrayList<String> endpoints = new ArrayList<>(Arrays.asList("wma", "sma"));
 
+    public CandlesticksCache getCandlestickRaw() {
+        return candlestickRaw;
+    }
+
+    private CandlesticksCache candlestickRaw;
+
     public BinanceTaapiTest(){
         // Adjusts parameters to fit binanace-java-api
         String currencyB = tradingPair.replaceAll("/", "");
@@ -31,20 +37,7 @@ public class BinanceTaapiTest {
         }
 
         ///////////////////////////////////// Candlesticks cache /////////////////////////////////////
-        CandlesticksCache candlestickRaw = new CandlesticksCache(currencyB, intervalB);
-
-
-
-
-
-
-
-
-
-
-
-
-
+        candlestickRaw = new CandlesticksCache(currencyB, intervalB);
 
         //String candlestickData = candlestickRaw.toString();
 
@@ -54,7 +47,7 @@ public class BinanceTaapiTest {
         //////////////////////////////////// TA indicators value ////////////////////////////////////
         //TAIndicatorRequest indicatorData = new TAIndicatorRequest(endpoints, tradingPair, interval);
 
-    }
+        }
     };
 
     /*public static void main(String[] args) {
