@@ -6,4 +6,5 @@ public class User {
     protected String email;
     protected String apiKey;
     protected String apiSecret;
+    protected byte[] taapiKey;
 }

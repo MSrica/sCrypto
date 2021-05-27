@@ -10,7 +10,7 @@ public class Login {
     protected static boolean getData(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
         user.username = Setup.username();
         String tmpPassword = Setup.password();
-        user.password = PasswordEncryptionService.getEncryptedPassword(tmpPassword, Constants.salt);
+        user.password = Encryption.getEncryptedBytes(tmpPassword, Constants.salt);
 
         return usernameAndPasswordCheck(user);
     }
@@ -25,6 +25,7 @@ public class Login {
                 user.email = rs.getString("EMAIL");
                 user.apiKey = rs.getString("API_KEY");
                 user.apiSecret = rs.getString("API_SECRET");
+                user.taapiKey = rs.getString("TAAPI_KEY").getBytes();
                 found.set(true);
             }
         } catch (SQLException e){

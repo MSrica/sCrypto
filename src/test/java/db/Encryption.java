@@ -7,15 +7,13 @@ import java.security.spec.KeySpec;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
-public class PasswordEncryptionService {
-
-    public static byte[] getEncryptedPassword(String password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
+public class Encryption {
+    public static byte[] getEncryptedBytes(String password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
         final String algorithm = "PBKDF2WithHmacSHA1";
         final int derivedKeyLength = 160;
         final int iterations = 2000;
 
         KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, iterations, derivedKeyLength);
-
         SecretKeyFactory f = SecretKeyFactory.getInstance(algorithm);
 
         return f.generateSecret(spec).getEncoded();

@@ -37,7 +37,7 @@ public class AlterUser {
                 break;
             case 2:
                 alteredString.set(Setup.password());
-                byte[] pass =  PasswordEncryptionService.getEncryptedPassword(alteredString.get(), Constants.salt);
+                byte[] pass =  Encryption.getEncryptedBytes(alteredString.get(), Constants.salt);
                 alterUserSet.set(" SET PASS='" + Arrays.toString(pass) + "'");
                 break;
             case 3:
@@ -52,8 +52,14 @@ public class AlterUser {
                 break;
             case 5:
                 alteredString.set(Setup.apiSecret());
-                alterUserSet.set(" SET API_SECRET='" + alteredString + "'");
+                byte[] taapi =  Encryption.getEncryptedBytes(alteredString.get(), Constants.salt);
+                alterUserSet.set(" SET API_SECRET='" + Arrays.toString(taapi) + "'");
                 alterUserCheck.set("SELECT * FROM " + Constants.tableName + " WHERE API_SECRET='" + alteredString + "'");
+                break;
+            case 6:
+                alteredString.set(Setup.taapiKey());
+                alterUserSet.set(" SET TAAPI_KEY='" + alteredString + "'");
+                alterUserCheck.set("SELECT * FROM " + Constants.tableName + " WHERE TAAPI_KEY='" + alteredString + "'");
                 break;
         }
 
@@ -90,7 +96,7 @@ public class AlterUser {
                 user.username = alterString.get();
                 break;
             case 2:
-                user.password = PasswordEncryptionService.getEncryptedPassword(alterString.get(), Constants.salt);
+                user.password = Encryption.getEncryptedBytes(alterString.get(), Constants.salt);
                 break;
             case 3:
                 user.email = alterString.get();
@@ -100,6 +106,9 @@ public class AlterUser {
                 break;
             case 5:
                 user.apiSecret = alterString.get();
+                break;
+            case 6:
+                user.taapiKey = Encryption.getEncryptedBytes(alterString.get(), Constants.salt);
                 break;
         }
     }

@@ -27,6 +27,10 @@ public class Setup {
         System.out.println("Please enter API secret");
         return scn.next();
     }
+    protected static String taapiKey(){
+        System.out.println("Please enter TAAPI key");
+        return scn.next();
+    }
 
     protected static boolean doubleCheck(){
         System.out.println("Enter 0 to cancel, 1 to delete account");
@@ -63,14 +67,14 @@ public class Setup {
     }
     protected static int whatToChange(){
         AtomicInteger returnValue = new AtomicInteger();
-        System.out.println("Enter 0 for exit altering, 1 for username, 2 for password, 3 for email, 4 for API key or 5 for API secret");
+        System.out.println("Enter 0 for exit altering, 1 for username, 2 for password, 3 for email, 4 for API key, 5 for API secret or 6 for TAAPI key");
 
         while(true){
             try {
                 returnValue.set(Integer.parseInt(scn.next()));
                 break;
             }catch(Exception e){
-                System.out.println("Please enter a number between 0 and 3");
+                System.out.println("Please enter a number between 0 and 6");
             }
         }
         return returnValue.get();

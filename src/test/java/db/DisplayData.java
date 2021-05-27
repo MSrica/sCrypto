@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class DisplayData {
 
-    public DisplayData(){
+    public static void displayData(){
         final String sqlSelectAllData = "SELECT * FROM " + Constants.tableName;
         try (Connection conn = DriverManager.getConnection(Constants.databaseUrl, Constants.adminUsername, Constants.adminPassword);
              PreparedStatement ps = conn.prepareStatement(sqlSelectAllData);
@@ -15,7 +15,8 @@ public class DisplayData {
                 String email = rs.getString("EMAIL");
                 String apiKey = rs.getString("API_KEY");
                 String apiSecret = rs.getString("API_SECRET");
-                System.out.println(name + " " + pass + " " + email + " " + apiKey + " " + apiSecret);
+                String taapiKey = rs.getString("TAAPI_KEY");
+                System.out.println(name + " " + pass + " " + email + " " + apiKey + " " + apiSecret + " " + taapiKey);
             }
         } catch (SQLException e){
             e.printStackTrace();
