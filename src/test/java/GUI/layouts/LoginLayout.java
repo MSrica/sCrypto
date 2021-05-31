@@ -19,6 +19,8 @@ public class LoginLayout {
 
     TextField registerUsername = new TextField();
     PasswordField registerPassword = new PasswordField();
+    PasswordField apiKey = new PasswordField();
+    PasswordField apiSecret = new PasswordField();
     Button registerButton = new Button("Register");
 
     Label registerResponse = new Label("");
@@ -55,13 +57,14 @@ public class LoginLayout {
             if (loginUsername.getText().isEmpty() || loginPassword.getText().isEmpty()) {
                 loginResponse.setText("Username or password cannot be empty");
             } else {
+                //test for prefs
+                MainGUI.prop.setPropertyString("username", loginUsername.getText());
+                MainGUI.prop.setPropertyString("password", loginPassword.getText());
+
                 loginResponse.setText("");
                 //TODO: check with db
                 MainGUI.getWindow().setScene(MainGUI.HomeScreen);
             }
-
-            //test for prefs
-            MainGUI.prop.setPropertyString("username", "myNewUsername");
         });
 
         loginLayout.getChildren().addAll(loginUsername, loginPassword, loginResponse, loginButton);
@@ -75,6 +78,8 @@ public class LoginLayout {
         //input fields
         registerUsername.setPromptText("Please input your username");
         registerPassword.setPromptText("Please input your password");
+        apiKey.setPromptText("Please input your apiKey");
+        apiSecret.setPromptText("Please input your apiSecret");
 
         registerUsername.setMaxHeight(30);
         registerUsername.setMinHeight(30);
@@ -86,12 +91,22 @@ public class LoginLayout {
         registerPassword.setMinWidth(300);
         registerPassword.setMaxWidth(300);
         registerPassword.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        apiKey.setMaxHeight(30);
+        apiKey.setMinHeight(30);
+        apiKey.setMinWidth(300);
+        apiKey.setMaxWidth(300);
+        apiKey.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        apiSecret.setMaxHeight(30);
+        apiSecret.setMinHeight(30);
+        apiSecret.setMinWidth(300);
+        apiSecret.setMaxWidth(300);
+        apiSecret.setPrefHeight(Region.USE_COMPUTED_SIZE);
 
 
         registerButton.setOnAction(e -> {
             //validation
-            if (registerUsername.getText().isEmpty() || registerPassword.getText().isEmpty()) {
-                registerResponse.setText("Username or password cannot be empty");
+            if (registerUsername.getText().isEmpty() || registerPassword.getText().isEmpty() || apiKey.getText().isEmpty() || apiSecret.getText().isEmpty()) {
+                registerResponse.setText("Username, password, apiKey or apiSecret cannot be empty");
             } else {
                 registerResponse.setText("");
                 MainGUI.getWindow().setScene(MainGUI.HomeScreen);
@@ -99,7 +114,7 @@ public class LoginLayout {
 
         });
 
-        registerLayout.getChildren().addAll(registerUsername, registerPassword, registerResponse, registerButton);
+        registerLayout.getChildren().addAll(registerUsername, registerPassword, apiKey, apiSecret, registerResponse, registerButton);
         /////////////////////////////////////////////////////////////////
         mainLayout.setAlignment(Pos.CENTER);
         mainLayout.getChildren().addAll(new Separator(), loginLayout, new Separator(), registerLayout, new Separator());
