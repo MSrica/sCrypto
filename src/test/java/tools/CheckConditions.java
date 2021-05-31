@@ -14,23 +14,26 @@ public class CheckConditions{
         if  (CheckMA(asset)) {
             // Then check if MACD is below zero line
             if (CheckMACDBelowZero(asset.macdValue)) {
-                // Lastly, check if there is MACD convergence
-                if (CheckConvergence(asset)) {
+                // Lastly, check if there is MACD convergence/divergence
+                if (CheckVergence(asset.macdHist)) {
                     if (orderPlaced) {
                         // Function call  for selling certain asset
                         // sell();
 
-                        // Sets .orderPlaced to "false" so that it can look out for selling next
+                        // Sets: .orderPlaced to "false" so that it can look out for buying next
+                        //       .macdHistPositive to "false" for resetting CheckVergence()
                         orderPlaced = false;
-
+                        macdHistPositive = false;
                         // "place" fake sell order
                         System.out.println("//// Fake sell order placed. ////" + System.currentTimeMillis());
                     } else {
                         // Function call for buying certain asset
                         // buy();
 
-                        // Sets .orderPlaced to "true" so that it can look out for selling next
+                        // Sets  .orderPlaced to "true" so that it can look out for selling next
+                        //       .macdHistNegative to "false" for resetting CheckVergence()
                         orderPlaced = true;
+                        macdHistNegative = false;
 
                         // "place" fake buy order
                         System.out.println("//// Fake buy order placed. ////" + System.currentTimeMillis());
@@ -55,6 +58,7 @@ public class CheckConditions{
         System.out.println("//////////////////////////////////////////");
     }
 
+
     // Checks if the MACD indicator is below zero line
     private boolean CheckMACDBelowZero(Double macdValue) {
         return macdValue < 0;
@@ -65,17 +69,27 @@ public class CheckConditions{
         return asset.close > asset.maValue;
     }
 
-    // Checks if MACD convergence happened
-    private boolean CheckConvergence(CandlestickEventToCandlestickConverter asset) {
-        // First look for negative macdHist value
-        if (asset.macdHist < 0 || macdHistNegative) {
-            macdHistNegative = true;
-            // Then look for positive macdHist value
-            if (asset.macdHist > 0) {
+    // Checks if MACD diVergence/conVergence happened
+    private boolean CheckVergence(Double macdHist) {
+        // Check divergence
+        if (orderPlaced) {
+            // First look for positive macdHist value
+            if (macdHist > 0 || macdHistPositive) {
                 macdHistPositive = true;
+                // Then look for negative macdHist value
+                // If both values are true, MACD divergence happened
+                return macdHist < 0;
+            }
+        // Check convergence
+        } else {
+            // First look for negative macdHist value
+            if (macdHist < 0 || macdHistNegative) {
+                macdHistNegative = true;
+                // Then look for positive macdHist value
+                // If both values are true, MACD convergence happened
+                return macdHist > 0;
             }
         }
-        // If both values are true, MACD convergence happened
-        return macdHistNegative && macdHistPositive;
+        return false;
     }
 }
