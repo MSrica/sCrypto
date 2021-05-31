@@ -51,6 +51,8 @@ public class HomeLayout {
         VBox sideBarVBox = new VBox(20);
         sideBarVBox.setAlignment(Pos.TOP_CENTER);
 
+        tradingPairSelectionBox.setValue(MainGUI.prop.getPropertyString("tradingPair"));
+
         tradingPairSelectionBox.getItems().add("BTC/USDT");
         tradingPairSelectionBox.getItems().add("second currency");
         tradingPairSelectionBox.getItems().add("third currency");
@@ -59,7 +61,11 @@ public class HomeLayout {
             int selectedIndex = tradingPairSelectionBox.getSelectionModel().getSelectedIndex();
             Object selectedItem = tradingPairSelectionBox.getSelectionModel().getSelectedItem();   //send to strategy //TODO: first get the bitch out the fuck ove lambde jebu
             System.out.println("TI: " + selectedIndex + " : " + selectedItem);
+
+            MainGUI.prop.setPropertyString("tradingPair", (String) selectedItem);
         });
+
+        intervalSelectionBox.setValue(MainGUI.prop.getPropertyString("interval"));
 
         intervalSelectionBox.getItems().add("1min");
         intervalSelectionBox.getItems().add("5min");
@@ -70,6 +76,8 @@ public class HomeLayout {
             int selectedIndex = intervalSelectionBox.getSelectionModel().getSelectedIndex();
             Object selectedItem = intervalSelectionBox.getSelectionModel().getSelectedItem();   //send to strategy
             System.out.println("Interval: " + selectedIndex + " : " + selectedItem);
+
+            MainGUI.prop.setPropertyString("interval", (String) selectedItem);
         });
 
         sendRequestButton.setOnAction(e -> {
@@ -79,7 +87,7 @@ public class HomeLayout {
         });
 
         logoutButton.setOnAction(e -> {
-            System.out.println("On logout output: " + MainGUI.prop.getPropertyString("username"));
+//            System.out.println("On logout output: " + MainGUI.prop.getPropertyString("username"));
             MainGUI.getWindow().setScene(MainGUI.LoginScreen);
         });
 
