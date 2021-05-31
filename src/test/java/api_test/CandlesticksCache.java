@@ -51,11 +51,6 @@ public class CandlesticksCache {
    */
   private BinanceApiClientFactory factory;
   private BinanceApiWebSocketClient client;
-  private Closeable fucker;    //Closeable var for client --> close deprecated in main class  //TODO: REFACTOR THE FUCKER, ANI
-
-  public Closeable getFucker() {
-    return fucker;
-  }
 
   public BinanceApiWebSocketClient getClient() {
     return client;
@@ -65,7 +60,7 @@ public class CandlesticksCache {
     factory = BinanceApiClientFactory.newInstance();
     client = factory.newWebSocketClient();  //TODO: close client
 
-    fucker = client.onCandlestickEvent(symbol.toLowerCase(), interval, response -> {
+    client.onCandlestickEvent(symbol.toLowerCase(), interval, response -> {
       Long openTime = response.getOpenTime();
       updateCandlestick = candlesticksCache.get(openTime);
       if (updateCandlestick == null) {

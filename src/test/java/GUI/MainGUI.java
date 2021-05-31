@@ -64,6 +64,5 @@ public class MainGUI extends Application {
     public void stop() throws Exception {
         super.stop();
         homeLayout.scheduledExecutorService.shutdownNow();  //use this later    //stops the graph update
-        //test.getCandlestickRaw().getFucker().close();   //TODO: find not deprecated close func
     }
 }

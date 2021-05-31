@@ -26,7 +26,6 @@ public class LoginLayout {
     Label registerResponse = new Label("");
 
     public HBox loginSceneLayout() {
-        //za sad samo ovo, kašnje neki tabview? za reg i login ili jedan do drugog idk
 
         //main HBox za login livo i reg desno
         HBox mainLayout = new HBox(40);

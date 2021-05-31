@@ -96,16 +96,17 @@ public class HomeLayout {
 
         //mock graph
         CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis(20000, 40000, 100);    //TODO: dynamically set range because kinda shitty
+        //34000, 39000, 100
+        NumberAxis yAxis = new NumberAxis();    //TODO: dynamically set range because kinda shitty --> take from all vals min and max --> min/max + set val are new bounds
         xAxis.setLabel("Time/m");
-        //xAxis.setAnimated(false); // axis animations are removed
         yAxis.setLabel("Value");
-        //yAxis.setAnimated(false); // axis animations are removed
+
+        yAxis.setAutoRanging(false);
 
         //creating the line chart with two axis created above
         final LineChart<String, Number> lineChart = new LineChart<>(xAxis, yAxis);
-        lineChart.setTitle("Graph");
-        //lineChart.setAnimated(false); // disable animations
+        lineChart.setTitle("CandlestickCache Info");
+        lineChart.setAnimated(false); // disable animations
 
         //chartB.prefHeightProperty().bind(chartA.heightProperty())
         lineChart.prefHeightProperty().bind(MainGUI.getWindow().heightProperty());
@@ -113,12 +114,16 @@ public class HomeLayout {
 
         //defining a series to display data
         XYChart.Series<String, Number> highSeries = new XYChart.Series<>();
-        highSeries.setName("candlestick high val");
+        highSeries.setName("high val");
         XYChart.Series<String, Number> lowSeries = new XYChart.Series<>();
-        highSeries.setName("candlestick low val");
+        highSeries.setName("low val");
+        XYChart.Series<String, Number> openSeries = new XYChart.Series<>();
+        highSeries.setName("open val");
+        XYChart.Series<String, Number> closeSeries = new XYChart.Series<>();
+        highSeries.setName("close val");
 
         // add series to chart
-        lineChart.getData().addAll(highSeries, lowSeries);
+        lineChart.getData().addAll(highSeries, lowSeries, openSeries, closeSeries);
 
         // this is used to display time in HH:mm:ss format
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -126,7 +131,7 @@ public class HomeLayout {
         // setup a scheduled executor to periodically put data into the chart
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
 
-        // put dummy data onto graph per second
+        // put data onto graph per second
         scheduledExecutorService.scheduleAtFixedRate(() -> {
 
             //Integer random = ThreadLocalRandom.current().nextInt(100);   //tu gre value od binancea ili čega god
@@ -134,27 +139,47 @@ public class HomeLayout {
             Platform.runLater(() -> {
                 String highVal;
                 String lowVal;
+                String openVal;
+                String closeVal;
                 if(CandlesticksCache.getUpdateCandlestick() != null) {
                     highVal = CandlesticksCache.getUpdateCandlestick().getHigh();
                     lowVal = CandlesticksCache.getUpdateCandlestick().getLow();
+                    openVal = CandlesticksCache.getUpdateCandlestick().getOpen();
+                    closeVal = CandlesticksCache.getUpdateCandlestick().getClose();
                 } else {
                     highVal = "0";
                     lowVal = "0";
+                    openVal = "0";
+                    closeVal = "0";
                 }
                 Double highValue = Double.parseDouble(highVal);
                 Double lowValue = Double.parseDouble(lowVal);
+                Double openValue = Double.parseDouble(openVal);
+                Double closeValue = Double.parseDouble(closeVal);
+
+                //dynamic bounds
+                double max = Math.max(Math.max(highValue, lowValue), Math.max(openValue, closeValue));
+                double min = Math.min(Math.min(highValue, lowValue), Math.min(openValue, closeValue));
+                yAxis.setUpperBound(max + 100);
+                yAxis.setLowerBound(min - 100);
 
                 // get current time
                 Date now = new Date();
                 // put random number with current time
                 highSeries.getData().add(new XYChart.Data<>(simpleDateFormat.format(now), highValue));
                 lowSeries.getData().add(new XYChart.Data<>(simpleDateFormat.format(now), lowValue));
+                openSeries.getData().add(new XYChart.Data<>(simpleDateFormat.format(now), openValue));
+                closeSeries.getData().add(new XYChart.Data<>(simpleDateFormat.format(now), closeValue));
 
                 //so the graph doesn't get unreadably shitfaced looking
                 if (highSeries.getData().size() > WINDOW_SIZE)
                     highSeries.getData().remove(0);
                 if (lowSeries.getData().size() > WINDOW_SIZE)
                     lowSeries.getData().remove(0);
+                if (openSeries.getData().size() > WINDOW_SIZE)
+                    openSeries.getData().remove(0);
+                if (closeSeries.getData().size() > WINDOW_SIZE)
+                    closeSeries.getData().remove(0);
             });
         }, 0, 5, TimeUnit.SECONDS);
 
