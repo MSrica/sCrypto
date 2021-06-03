@@ -34,6 +34,7 @@
                 <includes>
                     <include>login_reg.css</include>
                     <include>home.css</include>
+                    <include>candlestick_chart.css</include>
                 </includes>
             </resource>
         </resources>

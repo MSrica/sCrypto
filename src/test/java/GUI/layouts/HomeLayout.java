@@ -2,6 +2,7 @@ package GUI.layouts;
 
 import GUI.MainGUI;
 
+import GUI.candlestickChart.AdvCandleStickChart;
 import api_test.CandlesticksCache;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -96,7 +97,6 @@ public class HomeLayout {
 
         //mock graph
         CategoryAxis xAxis = new CategoryAxis();
-        //34000, 39000, 100
         NumberAxis yAxis = new NumberAxis();    //TODO: dynamically set range because kinda shitty --> take from all vals min and max --> min/max + set val are new bounds
         xAxis.setLabel("Time/m");
         yAxis.setLabel("Value");
@@ -106,7 +106,6 @@ public class HomeLayout {
         //creating the line chart with two axis created above
         final LineChart<String, Number> lineChart = new LineChart<>(xAxis, yAxis);
         lineChart.setTitle("CandlestickCache Info");
-        lineChart.setAnimated(false); // disable animations
 
         //chartB.prefHeightProperty().bind(chartA.heightProperty())
         lineChart.prefHeightProperty().bind(MainGUI.getWindow().heightProperty());
@@ -160,8 +159,8 @@ public class HomeLayout {
                 //dynamic bounds
                 double max = Math.max(Math.max(highValue, lowValue), Math.max(openValue, closeValue));
                 double min = Math.min(Math.min(highValue, lowValue), Math.min(openValue, closeValue));
-                yAxis.setUpperBound(max + 100);
-                yAxis.setLowerBound(min - 100);
+                yAxis.setUpperBound(max + 10);
+                yAxis.setLowerBound(min - 10);
 
                 // get current time
                 Date now = new Date();
@@ -181,7 +180,42 @@ public class HomeLayout {
                 if (closeSeries.getData().size() > WINDOW_SIZE)
                     closeSeries.getData().remove(0);
             });
-        }, 0, 5, TimeUnit.SECONDS);
+        }, 0, 1, TimeUnit.SECONDS);
+
+//        double[][] data = new double[][]{};
+//
+//        scheduledExecutorService.scheduleAtFixedRate(() -> {
+//
+//            Platform.runLater(() -> {
+//                // DAY, OPEN, CLOSE, HIGH, LOW, AVERAGE
+//                String open = null;
+//                String close = null;
+//                String high = null;
+//                String low = null;
+//                if(CandlesticksCache.getUpdateCandlestick() != null) {
+//                    high = CandlesticksCache.getUpdateCandlestick().getHigh();
+//                    low = CandlesticksCache.getUpdateCandlestick().getLow();
+//                    open = CandlesticksCache.getUpdateCandlestick().getOpen();
+//                    close = CandlesticksCache.getUpdateCandlestick().getClose();
+//                }
+//                Double highValue = Double.parseDouble(high);
+//                Double lowValue = Double.parseDouble(low);
+//                Double openValue = Double.parseDouble(open);
+//                Double closeValue = Double.parseDouble(close);
+//                Double average = highValue/lowValue;
+//
+//                //dynamic bounds
+//                double max = Math.max(Math.max(highValue, lowValue), Math.max(openValue, closeValue));
+//                double min = Math.min(Math.min(highValue, lowValue), Math.min(openValue, closeValue));
+//                yAxis.setUpperBound(max + 10);
+//                yAxis.setLowerBound(min - 10);
+//
+//                // get current time
+//                Date now = new Date();
+//
+//                //get it into data i guess????
+//            });
+//        }, 0, 1, TimeUnit.SECONDS);
 
         pane.setTop(titleHBox);
         pane.setLeft(sideBarVBox);

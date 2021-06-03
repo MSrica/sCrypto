@@ -82,7 +82,7 @@ public class CandlesticksCache {
 
       // Store the updated candlestick in the cache
       candlesticksCache.put(openTime, updateCandlestick);
-      System.out.println(updateCandlestick);
+//      System.out.println(updateCandlestick);
 
     });
 
@@ -108,11 +108,11 @@ public class CandlesticksCache {
 
       // Store the updated candlestick in the cache
       candlesticksCache.put(openTime, updateCandlestick);
-      System.out.println(updateCandlestick);
+//      System.out.println(updateCandlestick);
 
     });
 
-    System.out.println("gCC: " + getCandlesticksCache());
+//    System.out.println("gCC: " + getCandlesticksCache());
   }
 
   /**
