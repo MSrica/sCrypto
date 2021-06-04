@@ -5,6 +5,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class RemoveUser {
     protected static boolean removeUser(User user){
+        // returns true if user is successfully removed
+
         AtomicBoolean doubleCheck = new AtomicBoolean(Setup.doubleCheck());
         if(!doubleCheck.get()) return false;
 

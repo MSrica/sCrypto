@@ -12,23 +12,36 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class AlterUser {
-    protected static void alterUser(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    protected static boolean alterUser(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        // returns true if all actions are successful
+        // variables declaration
         AtomicReference<String> alterUserSet = new AtomicReference<>("");
         AtomicReference<String> alterUserCheck = new AtomicReference<>("");
         AtomicReference<String> alterString = new AtomicReference<>("");
+
+        // what is changing
         AtomicInteger commandSetup = new AtomicInteger(Setup.whatToChange());
 
-        if(doubleExisting(alterString, alterUserSet, alterUserCheck, commandSetup)) return;
+        // checking for existing data
+        if(doubleExisting(alterString, alterUserSet, alterUserCheck, commandSetup)) return false;
 
-        if(!updateDatabaseUser(user, alterUserSet)) return;
+        // updating database
+        if(!updateDatabaseUser(user, alterUserSet)) return false;
 
+        // updating current user (session)
         updateCurrentUser(user, alterString, commandSetup);
+
+        System.out.println("Data successfully altered!");
+        return true;
     }
     protected static boolean doubleExisting(AtomicReference<String> alteredString, AtomicReference<String> alterUserSet, AtomicReference<String> alterUserCheck, AtomicInteger commandSetup) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        // returns true if double data is found
         AtomicBoolean found = new AtomicBoolean(false);
 
+        // exiting the choice
         if(commandSetup.get() == 0) return !found.get();
 
+        // different options of what to choose
         switch (commandSetup.get()) {
             case 1:
                 alteredString.set(Setup.username());
@@ -64,7 +77,7 @@ public class AlterUser {
         }
 
         // checking for existing data
-        if(commandSetup.get() == 1 || commandSetup.get() == 3 || commandSetup.get() == 4 || commandSetup.get() == 5) {
+        if(commandSetup.get() == 1 || commandSetup.get() == 3 || commandSetup.get() == 4 || commandSetup.get() == 5 || commandSetup.get() == 6) {
             try (Connection conn = DriverManager.getConnection(Constants.databaseUrl, Constants.adminUsername, Constants.adminPassword);
                  PreparedStatement ps = conn.prepareStatement(alterUserCheck.get())) {
                 ResultSet rs = ps.executeQuery();
@@ -75,22 +88,29 @@ public class AlterUser {
             }
         }
 
+        if(found.get()) System.out.println("Existing data found!");
+        else System.out.println("No existing data found!");
+
         return found.get();
     }
     protected static boolean updateDatabaseUser(User user, AtomicReference<String> alterUserSet){
+        // returns true if database is successfully updated
         AtomicReference<String> alterUser = new AtomicReference<>("");
         alterUser.set("UPDATE " + Constants.tableName + alterUserSet + " WHERE USERNAME='" + user.username + "' AND EMAIL='" + user.email + "' AND ID IS NOT NULL");
 
         try (Connection conn = DriverManager.getConnection(Constants.databaseUrl, Constants.adminUsername, Constants.adminPassword);
              PreparedStatement ps = conn.prepareStatement(alterUser.get())){
             ps.executeUpdate();
+            System.out.println("Database updated!");
             return true;
         } catch (Exception e){
             e.printStackTrace();
         }
+        System.out.println("Database not updated!");
         return false;
     }
     protected static void updateCurrentUser(User user, AtomicReference<String> alterString, AtomicInteger commandSetup) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        // setting variables od current user
         switch (commandSetup.get()) {
             case 1:
                 user.username = alterString.get();
@@ -111,5 +131,6 @@ public class AlterUser {
                 user.taapiKey = Encryption.getEncryptedBytes(alterString.get(), Constants.salt);
                 break;
         }
+        System.out.println("Current user data updated!");
     }
 }

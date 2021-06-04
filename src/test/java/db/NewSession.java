@@ -6,14 +6,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class NewSession {
-    //public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException {
-    //    new NewSession();
-    //}
     public NewSession() throws NoSuchAlgorithmException, InvalidKeySpecException {
         User user = new User();
-        loginOrRegister(user);
+        loginOrRegisterInstruction(user);
     }
-    protected static void loginOrRegister(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    protected static void loginOrRegisterInstruction(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
         AtomicBoolean looping = new AtomicBoolean(false);
 
         do{
@@ -22,9 +19,9 @@ public class NewSession {
             else if(loginSetup.get() == 1) looping.set(Registration.addData(user));
         }while(!looping.get());
 
-        userActions(user);
+        userActionsInstructions(user);
     }
-    protected static void userActions(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    protected static void userActionsInstructions(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
         AtomicInteger commandSetup = new AtomicInteger(Setup.nextCommand());
 
         while(commandSetup.get() != 0){
@@ -33,10 +30,10 @@ public class NewSession {
                     DisplayData.displayData();
                     break;
                 case 2:
-                    AlterUser.alterUser(user);
+                    AlterUser.alterUser(user); // is boolean
                     break;
                 case 3:
-                    if(RemoveUser.removeUser(user)) loginOrRegister(user);
+                    if(RemoveUser.removeUser(user)) loginOrRegisterInstruction(user);
                     break;
             }
             commandSetup.set(Setup.nextCommand());

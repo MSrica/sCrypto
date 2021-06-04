@@ -9,6 +9,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Registration {
     protected static boolean addData(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        // returns true if entire adding process is successful
+
         enterUserData(user);
         if(chekExisting(user)) return false;
         return addUserData(user);
@@ -23,12 +25,13 @@ public class Registration {
         user.apiSecret = Setup.apiSecret();
         String tmpTaapiKey = Setup.taapiKey();
         user.taapiKey = Encryption.getEncryptedBytes(tmpTaapiKey, Constants.salt);
-        if (!(tmpPassword.length() >= 8 && !StringUtils.isAllLowerCase(tmpPassword) && tmpPassword.matches(".*\\d.*")))
-              enterUserData(user);
+        if (!(tmpPassword.length() >= 8 && !StringUtils.isAllLowerCase(tmpPassword) && tmpPassword.matches(".*\\d.*"))) enterUserData(user);
     }
     protected static boolean chekExisting(User user){
+        // returns true if user data exists
+
         AtomicBoolean doubleUser = new AtomicBoolean(false);
-        final String sqlSelectExistingData = "SELECT * FROM " + Constants.tableName + " WHERE USERNAME='" + user.username + "' OR EMAIL='" + user.email + "' OR API_KEY='" + user.apiKey + "' OR API_SECRET='" + user.apiSecret + "' OR TAAPI_KEY='" + user.taapiKey + "'";
+        final String sqlSelectExistingData = "SELECT * FROM " + Constants.tableName + " WHERE USERNAME='" + user.username + "' OR EMAIL='" + user.email + "' OR API_KEY='" + user.apiKey + "' OR API_SECRET='" + user.apiSecret + "' OR TAAPI_KEY='" + Arrays.toString(user.taapiKey) + "'";
         try (Connection conn = DriverManager.getConnection(Constants.databaseUrl, Constants.adminUsername, Constants.adminPassword);
              PreparedStatement ps = conn.prepareStatement(sqlSelectExistingData);
              ResultSet rs = ps.executeQuery()){
@@ -51,17 +54,23 @@ public class Registration {
             e.printStackTrace();
         }
 
+        if(!doubleUser.get()) System.out.println("No existing data found!");
         return doubleUser.get();
     }
     protected static boolean addUserData(User user){
-        final String addUser = "INSERT INTO " + Constants.tableName + "(USERNAME, PASS, EMAIL, API_KEY, API_SECRET, TAAPI_KEY)\n" + "VALUES ('" + user.username + "', '" + Arrays.toString(user.password) + "', '" +  user.email + "', '" + user.apiKey + "', '" + user.apiSecret  + "', '" + Arrays.toString(user.taapiKey) + "')";
+        // returns true if adding is successful
+
+        final String addUser = "INSERT INTO " + Constants.tableName + "(USERNAME, PASS, EMAIL, API_KEY, API_SECRET, TAAPI_KEY)\n" + "VALUES ('" + user.username + "', '" + Arrays.toString(user.password) + "', '" + user.email + "', '" + user.apiKey + "', '" + user.apiSecret  + "', '" + Arrays.toString(user.taapiKey) + "')";
         try (Connection conn = DriverManager.getConnection(Constants.databaseUrl, Constants.adminUsername, Constants.adminPassword);
-             PreparedStatement ps = conn.prepareStatement(addUser)){
+            PreparedStatement ps = conn.prepareStatement(addUser)){
             ps.executeUpdate();
+            System.out.println("User data added!");
             return true;
         } catch (Exception e){
             e.printStackTrace();
         }
+
+        System.out.println("User data failed to add!");
         return false;
     }
 }

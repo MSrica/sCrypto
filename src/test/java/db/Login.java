@@ -32,6 +32,9 @@ public class Login {
             e.printStackTrace();
         }
 
+        if(found.get()) System.out.println("Login successful!");
+        else System.out.println("Login unsuccessful!");
+
         return found.get();
     }
 }

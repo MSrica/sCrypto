@@ -4,7 +4,6 @@ import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Setup {
-
     protected static Scanner scn = new Scanner(System.in);
 
     protected static String username(){
