@@ -8,10 +8,10 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Registration {
-    protected static boolean addData(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public static boolean addData(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
         // returns true if entire adding process is successful
 
-        enterUserData(user);
+//        enterUserData(user);
         if(chekExisting(user)) return false;
         return addUserData(user);
     }

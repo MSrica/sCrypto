@@ -7,7 +7,7 @@ public class ChartTest {
 
     public HBox chartScreenLayout() {
         HBox layout = new HBox();
-//        layout.getChildren().add(new AdvCandleStickChart());
+        layout.getChildren().add(new AdvCandleStickChart());
 
         return layout;
     }

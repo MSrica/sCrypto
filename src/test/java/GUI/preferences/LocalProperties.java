@@ -36,7 +36,7 @@ public class LocalProperties {
             prop.setProperty(key, value);
             // save properties to project root folder
             prop.store(output, null);
-            System.out.println("props on end of setProp: " + prop);
+//            System.out.println("props on end of setProp: " + prop);
         } catch (IOException io) {
             io.printStackTrace();
         }
@@ -48,7 +48,7 @@ public class LocalProperties {
             prop.load(input);
             // set the properties value
             prop.getProperty(key, "default");
-            System.out.println("Property "+ prop.getProperty(key, "default"));
+//            System.out.println("Property "+ prop.getProperty(key, "default"));
 
             return prop.getProperty(key, "default");
         } catch (IOException io) {

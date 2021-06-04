@@ -52,7 +52,7 @@ public class HomeLayout {
         VBox sideBarVBox = new VBox(20);
         sideBarVBox.setAlignment(Pos.TOP_CENTER);
 
-        tradingPairSelectionBox.setValue(MainGUI.prop.getPropertyString("tradingPair"));
+        tradingPairSelectionBox.setValue(MainGUI.prop.getPropertyString("tradingPair").equals("") ? "" : MainGUI.prop.getPropertyString("tradingPair"));
 
         tradingPairSelectionBox.getItems().add("BTC/USDT");
         tradingPairSelectionBox.getItems().add("second currency");
@@ -66,7 +66,7 @@ public class HomeLayout {
             MainGUI.prop.setPropertyString("tradingPair", (String) selectedItem);
         });
 
-        intervalSelectionBox.setValue(MainGUI.prop.getPropertyString("interval"));
+        intervalSelectionBox.setValue(MainGUI.prop.getPropertyString("interval").equals("") ? "" : MainGUI.prop.getPropertyString("interval"));
 
         intervalSelectionBox.getItems().add("1min");
         intervalSelectionBox.getItems().add("5min");
@@ -88,7 +88,11 @@ public class HomeLayout {
         });
 
         logoutButton.setOnAction(e -> {
-//            System.out.println("On logout output: " + MainGUI.prop.getPropertyString("username"));
+            MainGUI.prop.setPropertyString("username", "");
+            MainGUI.prop.setPropertyString("password", "");
+            MainGUI.prop.setPropertyString("logged", "false");
+            MainGUI.prop.setPropertyString("tradingPair", "");
+            MainGUI.prop.setPropertyString("interval", "");
             MainGUI.getWindow().setScene(MainGUI.LoginScreen);
         });
 

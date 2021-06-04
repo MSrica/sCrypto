@@ -7,10 +7,10 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Login {
-    protected static boolean getData(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        user.username = Setup.username();
-        String tmpPassword = Setup.password();
-        user.password = Encryption.getEncryptedBytes(tmpPassword, Constants.salt);
+    public static boolean getData(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
+//        user.username = Setup.username();
+//        String tmpPassword = Setup.password();
+//        user.password = Encryption.getEncryptedBytes(tmpPassword, Constants.salt);
 
         return usernameAndPasswordCheck(user);
     }
