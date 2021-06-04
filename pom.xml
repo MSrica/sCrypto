@@ -14,6 +14,12 @@
             <artifactId>binance-api-client</artifactId>
             <version>1.0.1</version>
         </dependency>
+      
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>16</version>
+        </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
@@ -37,7 +43,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.6</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -45,5 +50,18 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/test/resources</directory>
+                <includes>
+                    <include>login_reg.css</include>
+                    <include>home.css</include>
+                    <include>candlestick_chart.css</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
 
 </project>

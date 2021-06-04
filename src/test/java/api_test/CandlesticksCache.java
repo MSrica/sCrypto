@@ -6,6 +6,7 @@ import com.binance.api.client.BinanceApiWebSocketClient;
 import com.binance.api.client.domain.market.Candlestick;
 import com.binance.api.client.domain.market.CandlestickInterval;
 
+import java.io.Closeable;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -18,7 +19,7 @@ public class CandlesticksCache {
   /**
    * Key is the start/open time of the candle, and the value contains candlestick date.
    */
-  private Map<Long, Candlestick> candlesticksCache;
+  public Map<Long, Candlestick> candlesticksCache;
 
   public CandlesticksCache(String symbol, CandlestickInterval interval) {
     initializeCandlestickCache(symbol, interval);
@@ -39,16 +40,29 @@ public class CandlesticksCache {
     }
   }
 
+  public static Candlestick updateCandlestick;
+
+  public static Candlestick getUpdateCandlestick() {
+    return updateCandlestick;
+  }
+
   /**
    * Begins streaming of depth events.
    */
+  private BinanceApiClientFactory factory;
+  private BinanceApiWebSocketClient client;
+
+  public BinanceApiWebSocketClient getClient() {
+    return client;
+  }
+
   private void startCandlestickEventStreaming(String symbol, CandlestickInterval interval) {
-    BinanceApiClientFactory factory = BinanceApiClientFactory.newInstance();
-    BinanceApiWebSocketClient client = factory.newWebSocketClient();
+    factory = BinanceApiClientFactory.newInstance();
+    client = factory.newWebSocketClient();  //TODO: close client
 
     client.onCandlestickEvent(symbol.toLowerCase(), interval, response -> {
       Long openTime = response.getOpenTime();
-      Candlestick updateCandlestick = candlesticksCache.get(openTime);
+      updateCandlestick = candlesticksCache.get(openTime);
       if (updateCandlestick == null) {
         // new candlestick
         updateCandlestick = new Candlestick();
@@ -68,11 +82,37 @@ public class CandlesticksCache {
 
       // Store the updated candlestick in the cache
       candlesticksCache.put(openTime, updateCandlestick);
-      System.out.println(updateCandlestick);
+//      System.out.println(updateCandlestick);
 
     });
 
-    System.out.println("gCC: " + getCandlesticksCache());
+    client.onCandlestickEvent(symbol.toLowerCase(), interval, response -> {
+      Long openTime = response.getOpenTime();
+      updateCandlestick = candlesticksCache.get(openTime);
+      if (updateCandlestick == null) {
+        // new candlestick
+        updateCandlestick = new Candlestick();
+      }
+      // update candlestick with the stream data
+      updateCandlestick.setOpenTime(response.getOpenTime());
+      updateCandlestick.setOpen(response.getOpen());
+      updateCandlestick.setLow(response.getLow());
+      updateCandlestick.setHigh(response.getHigh());
+      updateCandlestick.setClose(response.getClose());
+      updateCandlestick.setCloseTime(response.getCloseTime());
+      updateCandlestick.setVolume(response.getVolume());
+      updateCandlestick.setNumberOfTrades(response.getNumberOfTrades());
+      updateCandlestick.setQuoteAssetVolume(response.getQuoteAssetVolume());
+      updateCandlestick.setTakerBuyQuoteAssetVolume(response.getTakerBuyQuoteAssetVolume());
+      updateCandlestick.setTakerBuyBaseAssetVolume(response.getTakerBuyQuoteAssetVolume());
+
+      // Store the updated candlestick in the cache
+      candlesticksCache.put(openTime, updateCandlestick);
+//      System.out.println(updateCandlestick);
+
+    });
+
+//    System.out.println("gCC: " + getCandlesticksCache());
   }
 
   /**
@@ -83,7 +123,7 @@ public class CandlesticksCache {
     return candlesticksCache;
   }
 
-  public static void main(String[] args) {
-    new CandlesticksCache("ETHBTC", CandlestickInterval.ONE_MINUTE);
-  }
+  //public static void main(String[] args) {
+  //  new CandlesticksCache("ETHBTC", CandlestickInterval.ONE_MINUTE);
+  //}
 }
