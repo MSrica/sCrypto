@@ -3,7 +3,6 @@ import java.io.*;
 import java.util.Properties;
 
 public class LocalProperties {
-    //TODO: try getting existing values to a String var, append the new key-value pairs, store it back into config.prop
     private Properties prop;
 
     public LocalProperties() {

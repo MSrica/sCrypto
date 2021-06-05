@@ -33,7 +33,7 @@ public class MainGUI extends Application {
     ChartTest chartLayout = new ChartTest();
 
     //stuff
-//    static BinanceTaapiTest test;
+//    static BinanceTaapiTest test
     public static LocalProperties prop;
 
     public static void main(String[] args) {

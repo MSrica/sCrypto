@@ -1,8 +1,10 @@
 package tools;
 
 
+import GUI.MainGUI;
+import GUI.layouts.HomeLayout;
 import api_requests.TAIndicatorRequest;
-import strategy.MainTmp;
+//import strategy.MainTmp;
 
 public class CheckConditions{
     private static boolean orderPlaced = false;
@@ -41,9 +43,10 @@ public class CheckConditions{
                 }
             }
         }
+
         // Request MACD and MA200 indicators again
-        new TAIndicatorRequest(MainTmp.tradingPair, MainTmp.taapiData.interval);
-        MainTmp.indicators = new TAIndicatorReader();
+        new TAIndicatorRequest(HomeLayout.tradingPair, HomeLayout.interval);
+        HomeLayout.indicators = new TAIndicatorReader();
 
 //        System.out.println("MACD:\n- value: " + asset.macdValue + "\n- signal: " + asset.macdSignal + "\n- hist: " + asset.macdHist + "\nMA200:\n- value: " + asset.maValue);
 //        System.out.println(MainTmp.tradingPair + "\n- high: " + asset.high + "\n- open: " + asset.open + "\n- close: " + asset.close + "\n- open: " + asset.low);

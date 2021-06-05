@@ -3,7 +3,10 @@ package GUI.layouts;
 import GUI.MainGUI;
 
 import GUI.candlestickChart.AdvCandleStickChart;
+import api_requests.CandlestickDataStream;
 import api_requests.CandlesticksCache;
+import api_requests.TAIndicatorRequest;
+import com.binance.api.client.domain.market.CandlestickInterval;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.chart.CategoryAxis;
@@ -16,6 +19,11 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import tools.BinanceTaapiDataConverter;
+import tools.CandlestickEventToCandlestickConverter;
+import tools.TAIndicatorReader;
+
+import com.binance.api.client.domain.event.CandlestickEvent;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,8 +44,15 @@ public class HomeLayout {
     ComboBox<String> tradingPairSelectionBox = new ComboBox<String>();
     Label intervalLabel = new Label("interval selection:");
     ComboBox<String> intervalSelectionBox = new ComboBox<String>();
-    Button sendRequestButton = new Button("Commit changes/Send request");   //TODO: needs implementation --> on press take interval and TI and give to strategy
+    Button sendRequestButton = new Button("Commit changes/Send request");
     Button logoutButton = new Button("Logout");
+
+    public static TAIndicatorReader indicators;
+
+    public static String tradingPair;
+    public static String interval;
+
+    CandlestickDataStream instance;
 
     public VBox homeScreenLayout() {
         VBox layout = new VBox(50);
@@ -55,12 +70,12 @@ public class HomeLayout {
         tradingPairSelectionBox.setValue(MainGUI.prop.getPropertyString("tradingPair").equals("") ? "" : MainGUI.prop.getPropertyString("tradingPair"));
 
         tradingPairSelectionBox.getItems().add("BTC/USDT");
-        tradingPairSelectionBox.getItems().add("second currency");
-        tradingPairSelectionBox.getItems().add("third currency");
+//        tradingPairSelectionBox.getItems().add("second currency");
+//        tradingPairSelectionBox.getItems().add("third currency");
 
         tradingPairSelectionBox.setOnAction((event) -> {
             int selectedIndex = tradingPairSelectionBox.getSelectionModel().getSelectedIndex();
-            Object selectedItem = tradingPairSelectionBox.getSelectionModel().getSelectedItem();   //send to strategy //TODO: first get the bitch out the fuck ove lambde jebu
+            Object selectedItem = tradingPairSelectionBox.getSelectionModel().getSelectedItem();   //send to strategy
             System.out.println("TI: " + selectedIndex + " : " + selectedItem);
 
             MainGUI.prop.setPropertyString("tradingPair", (String) selectedItem);
@@ -68,10 +83,8 @@ public class HomeLayout {
 
         intervalSelectionBox.setValue(MainGUI.prop.getPropertyString("interval").equals("") ? "" : MainGUI.prop.getPropertyString("interval"));
 
-        intervalSelectionBox.getItems().add("1min");
-        intervalSelectionBox.getItems().add("5min");
-        intervalSelectionBox.getItems().add("15min");
-        intervalSelectionBox.getItems().add("1h");
+        //"1m", "3m", "5m", "15m", "30m", "1h", "2h", "4h", "6h", "8h", "12h", "1d", "3d", "1w", "1M"
+        intervalSelectionBox.getItems().addAll("1m", "3m", "5m", "15m", "30m", "1h", "2h", "4h", "6h", "8h", "12h", "1d", "3d", "1w", "1M");
 
         intervalSelectionBox.setOnAction((event) -> {
             int selectedIndex = intervalSelectionBox.getSelectionModel().getSelectedIndex();
@@ -82,7 +95,20 @@ public class HomeLayout {
         });
 
         sendRequestButton.setOnAction(e -> {
-            //TODO: send request with interval and TI
+            /////////////////////////////////
+            tradingPair = tradingPairSelectionBox.getSelectionModel().getSelectedItem();
+            interval = intervalSelectionBox.getSelectionModel().getSelectedItem();
+
+            new TAIndicatorRequest(tradingPair, interval);
+
+            // Request MACD and MA200 indicators
+            indicators = new TAIndicatorReader();
+
+            ////////////////////////////////////// Candlesticks stream //////////////////////////////////////
+            BinanceTaapiDataConverter binanceData = new BinanceTaapiDataConverter(tradingPair, interval);
+            instance = new CandlestickDataStream(binanceData.tradingPairB, binanceData.intervalB);
+            //////////////////////////////////
+
             System.out.println(intervalSelectionBox.getSelectionModel().getSelectedItem());
             System.out.println(tradingPairSelectionBox.getSelectionModel().getSelectedItem());
         });
@@ -101,7 +127,7 @@ public class HomeLayout {
 
         //mock graph
         CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis();    //TODO: dynamically set range because kinda shitty --> take from all vals min and max --> min/max + set val are new bounds
+        NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Time/m");
         yAxis.setLabel("Value");
 
@@ -119,14 +145,14 @@ public class HomeLayout {
         XYChart.Series<String, Number> highSeries = new XYChart.Series<>();
         highSeries.setName("high val");
         XYChart.Series<String, Number> lowSeries = new XYChart.Series<>();
-        highSeries.setName("low val");
+        lowSeries.setName("low val");
         XYChart.Series<String, Number> openSeries = new XYChart.Series<>();
-        highSeries.setName("open val");
+        openSeries.setName("open val");
         XYChart.Series<String, Number> closeSeries = new XYChart.Series<>();
-        highSeries.setName("close val");
+        closeSeries.setName("close val");
 
         // add series to chart
-        lineChart.getData().addAll(highSeries, lowSeries, openSeries, closeSeries);
+        lineChart.getData().addAll(closeSeries, highSeries, lowSeries, openSeries);
 
         // this is used to display time in HH:mm:ss format
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -137,6 +163,7 @@ public class HomeLayout {
         // put data onto graph per second
         scheduledExecutorService.scheduleAtFixedRate(() -> {
 
+
             //Integer random = ThreadLocalRandom.current().nextInt(100);   //tu gre value od binancea ili čega god
             // Update the chart
             Platform.runLater(() -> {
@@ -144,11 +171,16 @@ public class HomeLayout {
                 String lowVal;
                 String openVal;
                 String closeVal;
-                if(CandlesticksCache.getUpdateCandlestick() != null) {
-                    highVal = CandlesticksCache.getUpdateCandlestick().getHigh();
-                    lowVal = CandlesticksCache.getUpdateCandlestick().getLow();
-                    openVal = CandlesticksCache.getUpdateCandlestick().getOpen();
-                    closeVal = CandlesticksCache.getUpdateCandlestick().getClose();
+                if(instance.event != null) {
+//                if(CandlesticksCache.getUpdateCandlestick() != null) {
+//                    highVal = CandlesticksCache.getUpdateCandlestick().getHigh();
+//                    lowVal = CandlesticksCache.getUpdateCandlestick().getLow();
+//                    openVal = CandlesticksCache.getUpdateCandlestick().getOpen();
+//                    closeVal = CandlesticksCache.getUpdateCandlestick().getClose();
+                    highVal = instance.event.getHigh();
+                    lowVal = instance.event.getLow();
+                    openVal = instance.event.getOpen();
+                    closeVal = instance.event.getClose();
                 } else {
                     highVal = "0";
                     lowVal = "0";

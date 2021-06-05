@@ -69,7 +69,6 @@ public class LoginLayout {
                 loginResponse.setText("Username or password cannot be empty");
             } else {
                 loginResponse.setText("");
-                //TODO: check with db
                 user.username = loginUsername.getText();
                 try {
                     user.password = Encryption.getEncryptedBytes(loginPassword.getText(), Constants.salt);
