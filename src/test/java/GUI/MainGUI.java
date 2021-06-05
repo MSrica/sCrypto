@@ -4,8 +4,7 @@ import GUI.layouts.ChartTest;
 import GUI.layouts.HomeLayout;
 import GUI.layouts.LoginLayout;
 import GUI.preferences.LocalProperties;
-import api_test.BinanceTaapiTest;
-import api_test.CandlesticksCache;
+import api_requests.CandlesticksCache;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.chart.Chart;
@@ -34,12 +33,12 @@ public class MainGUI extends Application {
     ChartTest chartLayout = new ChartTest();
 
     //stuff
-    static BinanceTaapiTest test;
+//    static BinanceTaapiTest test;
     public static LocalProperties prop;
 
     public static void main(String[] args) {
         prop  = new LocalProperties();
-        test = new BinanceTaapiTest(); //launches binance stuff --> api_test
+//        test = new BinanceTaapiTest(); //launches binance stuff --> api_test
         launch(args); // launches gui application
     }
 

@@ -3,7 +3,7 @@ package GUI.layouts;
 import GUI.MainGUI;
 
 import GUI.candlestickChart.AdvCandleStickChart;
-import api_test.CandlesticksCache;
+import api_requests.CandlesticksCache;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.chart.CategoryAxis;

@@ -1,4 +1,4 @@
-package api_test;
+package api_requests;
 
 import com.binance.api.client.BinanceApiClientFactory;
 import com.binance.api.client.BinanceApiRestClient;
