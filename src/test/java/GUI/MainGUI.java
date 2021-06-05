@@ -64,7 +64,11 @@ public class MainGUI extends Application {
 //        window.setScene(ChartScreen);
 
         //za početak login screen directly, kašnje provjera ako je već ulogiran korisnik
-        window.setScene(LoginScreen);
+        if (prop.getPropertyString("logged").equals("true")) {
+            window.setScene(HomeScreen);
+        } else {
+            window.setScene(LoginScreen);
+        }
         window.show();
     }
 

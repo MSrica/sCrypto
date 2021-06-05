@@ -1,10 +1,10 @@
 package db;
 
 public class User {
-    protected String username;
-    protected byte[] password;
-    protected String email;
-    protected String apiKey;
-    protected String apiSecret;
-    protected byte[] taapiKey;
+    public String username;
+    public byte[] password;
+    public String email;
+    public String apiKey;
+    public String apiSecret;
+    public byte[] taapiKey;
 }
