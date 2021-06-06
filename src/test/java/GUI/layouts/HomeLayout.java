@@ -2,7 +2,6 @@ package GUI.layouts;
 
 import GUI.MainGUI;
 
-import GUI.candlestickChart.AdvCandleStickChart;
 import api_requests.CandlestickDataStream;
 import api_requests.CandlesticksCache;
 import api_requests.TAIndicatorRequest;
@@ -40,11 +39,11 @@ public class HomeLayout {
     Label logo = new Label("sCrypto");
     //sidebar menu
     Label sidebar = new Label("SideBar");
-    Label tradingPairLabel = new Label("TI selection:");
+    Label tradingPairLabel = new Label("TradingPair selection:");
     ComboBox<String> tradingPairSelectionBox = new ComboBox<String>();
-    Label intervalLabel = new Label("interval selection:");
+    Label intervalLabel = new Label("Interval selection:");
     ComboBox<String> intervalSelectionBox = new ComboBox<String>();
-    Button sendRequestButton = new Button("Commit changes/Send request");
+    Button sendRequestButton = new Button("Send request");
     Button logoutButton = new Button("Logout");
 
     public static TAIndicatorReader indicators;
@@ -119,11 +118,16 @@ public class HomeLayout {
             MainGUI.prop.setPropertyString("logged", "false");
             MainGUI.prop.setPropertyString("tradingPair", "");
             MainGUI.prop.setPropertyString("interval", "");
-            MainGUI.getWindow().setScene(MainGUI.LoginScreen);
+            //clear the comboboxes since this user is not here anymore
+            intervalSelectionBox.getSelectionModel().clearSelection();
+            tradingPairSelectionBox.getSelectionModel().clearSelection();
+            //try to close the client
+            System.exit(0); //shut down entire program
+
+//            MainGUI.getWindow().setScene(MainGUI.LoginScreen);
         });
 
         sideBarVBox.getChildren().addAll(sidebar, tradingPairLabel, tradingPairSelectionBox, intervalLabel, intervalSelectionBox, sendRequestButton, logoutButton);
-
 
         //mock graph
         CategoryAxis xAxis = new CategoryAxis();

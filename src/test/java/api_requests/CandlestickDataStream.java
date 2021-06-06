@@ -9,9 +9,10 @@ import tools.CandlestickEventToCandlestickConverter;
 public class CandlestickDataStream {
 
   public CandlestickEvent event;
+  public BinanceApiWebSocketClient client;
 
   public CandlestickDataStream(String tradingPair, CandlestickInterval interval){
-    BinanceApiWebSocketClient client;
+
     try {
       client = BinanceApiClientFactory.newInstance().newWebSocketClient();
       System.out.println("Connected to web socket successfully");

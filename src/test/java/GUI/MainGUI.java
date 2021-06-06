@@ -1,18 +1,11 @@
 package GUI;
 
-import GUI.layouts.ChartTest;
 import GUI.layouts.HomeLayout;
 import GUI.layouts.LoginLayout;
 import GUI.preferences.LocalProperties;
-import api_requests.CandlesticksCache;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.chart.Chart;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-
-import java.io.File;
-import java.net.MalformedURLException;
 
 public class MainGUI extends Application {
 
@@ -30,7 +23,6 @@ public class MainGUI extends Application {
     //layouts
     LoginLayout loginLayout = new LoginLayout();
     HomeLayout homeLayout = new HomeLayout();
-    ChartTest chartLayout = new ChartTest();
 
     //stuff
 //    static BinanceTaapiTest test
@@ -50,7 +42,6 @@ public class MainGUI extends Application {
 
         LoginScreen = new Scene(loginLayout.loginSceneLayout(), 1000, 700);
         HomeScreen = new Scene(homeLayout.homeScreenLayout(), 1000, 700);
-        ChartScreen = new Scene(chartLayout.chartScreenLayout(), 1000, 700);
 
         //scene.getStylesheets().add(getClass().getResource("demo.css").toExternalForm());
         //getClass().getResource("style.css").toString()
@@ -58,10 +49,6 @@ public class MainGUI extends Application {
 
         LoginScreen.getStylesheets().add(getClass().getResource("/stylesheets/login_reg.css").toExternalForm());
         HomeScreen.getStylesheets().add(getClass().getResource("/stylesheets/home.css").toExternalForm());
-
-        //testing the chart
-        ChartScreen.getStylesheets().add(getClass().getResource("/stylesheets/candlestick_chart.css").toExternalForm());
-//        window.setScene(ChartScreen);
 
         //za početak login screen directly, kašnje provjera ako je već ulogiran korisnik
         if (prop.getPropertyString("logged").equals("true")) {
