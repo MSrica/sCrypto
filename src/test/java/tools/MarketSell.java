@@ -24,7 +24,7 @@ public class MarketSell {
         client.newOrder(marketSell(tradingPair,  quantity));
     }
 
-    public static void main() {
+    public static void sell() {
         //System.out.println("prodajem");
         BinanceApiClientFactory factory = BinanceApiClientFactory.newInstance("api", "secret");
         BinanceApiRestClient client = factory.newRestClient();

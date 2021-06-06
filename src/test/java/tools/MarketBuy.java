@@ -18,12 +18,15 @@ public class MarketBuy {
     public static void buysCrypto(BinanceApiRestClient client, String tradingPair, String quantity){
         client.newOrder(marketBuy(tradingPair,  quantity));
     }
-    public static void main() {
-        //System.out.println("kupujem");
-        BinanceApiClientFactory factory = BinanceApiClientFactory.newInstance("api", "secret");
+
+    public static void buy() {
+        System.out.println("Buying");
+        BinanceApiClientFactory factory = BinanceApiClientFactory.newInstance("", "");
         BinanceApiRestClient client = factory.newRestClient();
+        System.out.println(tradingPair);
         String quantity = pricesCrypto(client, tradingPair);
         //System.out.println(quantity);
+
         buysCrypto(client, tradingPair, quantity);
     }
 }

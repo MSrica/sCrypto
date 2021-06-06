@@ -21,7 +21,7 @@ public class CheckConditions{
                     if (orderPlaced) {
                         // Function call  for selling certain asset
                         // sell();
-
+                        MarketSell.sell();
                         // Sets: .orderPlaced to "false" so that it can look out for buying next
                         //       .macdHistPositive to "false" for resetting CheckVergence()
                         orderPlaced = false;
@@ -31,7 +31,7 @@ public class CheckConditions{
                     } else {
                         // Function call for buying certain asset
                         // buy();
-
+                        MarketBuy.buy();
                         // Sets  .orderPlaced to "true" so that it can look out for selling next
                         //       .macdHistNegative to "false" for resetting CheckVergence()
                         orderPlaced = true;
