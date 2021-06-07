@@ -20,14 +20,11 @@ public class CandlestickDataStream {
       System.out.println("Connecting to web socket failed\n" + e);
       return;
     }
-//    client.onCandlestickEvent(tradingPair, interval, CandlestickEventToCandlestickConverter::new);
+
     client.onCandlestickEvent(tradingPair, interval, (response) -> {
       this.event = response;
-      System.out.println(event);
+      new CandlestickEventToCandlestickConverter(response);
+//      System.out.println(event);
     });
   }
-
-//  public CandlestickDataStream(CandlestickEvent event) {
-//    this.event = event;
-//  }
 }
